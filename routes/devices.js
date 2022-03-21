@@ -18,4 +18,6 @@ router.patch("/ready", ctrlDevices.readyDevice);
 // PATCH /devices/operating 특정 장비의 가동상태 바꾸기
 router.patch("/operating", ctrlDevices.operatingDevice);
 
+// 장비 삭제
+
 module.exports = router;
