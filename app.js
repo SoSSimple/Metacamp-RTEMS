@@ -3,6 +3,11 @@ const morgan = require("morgan");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const session = require("express-session");
+
+// passport
+const passport = require("passport");
+const passportConfig = require("./passport");
 
 // Database Sequelize
 const { sequelize } = require("./models");
@@ -18,12 +23,28 @@ sequelize
 const app = express();
 const PORT = 8080;
 
+// passport set
+passportConfig();
+
 app.use(morgan("dev"));
 app.use("/", express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIE_SECRET));
+// app.use(
+//   session({
+//     resave: false,
+//     saveUninitialized: false,
+//     secret: process.env.COOKIE_SECRET,
+//     cookie: {
+//       httpOnly: true,
+//       secure: false,
+//     },
+//   })
+// );
+app.use(passport.initialize());
+// app.use(passport.session());
 
 // routing
 const usersRoute = require("./routes/users.js");

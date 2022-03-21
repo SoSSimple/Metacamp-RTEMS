@@ -17,4 +17,10 @@ router.post("/edits", ctrlUsers.editUser);
 // PATCH /users/edit 회원 정보 일부 수정
 router.patch("/edit", ctrlUsers.editUser);
 
+// POST /users/login
+router.post("/login", ctrlUsers.loginUser);
+
+// GET /users/logout
+router.get("/logout", ctrlUsers.logoutUser);
+
 module.exports = router;

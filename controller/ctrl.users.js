@@ -1,6 +1,6 @@
-const data = require("../data/users");
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
+const passport = require("passport");
 
 const getUsers = async (req, res, next) => {
   res.status(200).json({
@@ -50,6 +50,29 @@ const signUser = async (req, res, next) => {
 const removeUser = async (req, res) => {};
 const editsUser = async (req, res) => {};
 const editUser = async (req, res) => {};
+const loginUser = async (req, res, next) => {
+  passport.authenticate("local", (authError, user, info) => {
+    if (authError) {
+      console.error(`authError ${authError}`);
+      return next(authError);
+    }
+    if (!user) {
+      console.log(user);
+      return res.send("<h1>id 혹은 password가 일치하지 않음</h1>");
+    }
+    return req.login(user, (loginError) => {
+      if (loginError) {
+        console.error(`loginError ${loginError}`);
+        return next(loginError);
+      }
+      return res.send(`<h1>login success</h1>`);
+    });
+  })(req, res, next);
+};
+const logoutUser = async (req, res) => {
+  req.logout();
+  req.session.destroy();
+};
 
 module.exports = {
   getUsers,
@@ -57,4 +80,6 @@ module.exports = {
   removeUser,
   editsUser,
   editUser,
+  loginUser,
+  logoutUser,
 };
