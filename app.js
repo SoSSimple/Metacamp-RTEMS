@@ -1,7 +1,29 @@
 const express = require("express");
+const morgan = require("morgan");
+const path = require("path");
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+
+// Database Sequelize
+const { sequelize } = require("./models");
+sequelize
+  .sync({ force: false })
+  .then(() => {
+    console.log("database connection success");
+  })
+  .catch((err) => {
+    console.error(`database connection failed ${err}`);
+  });
 
 const app = express();
 const PORT = 8080;
+
+app.use(morgan("dev"));
+app.use("/", express.static(path.join(__dirname, "public")));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(cookieParser(process.env.COOKIE_SECRET));
 
 // routing
 const usersRoute = require("./routes/users.js");
