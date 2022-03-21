@@ -5,6 +5,10 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
+// routing
+const usersRoute = require("./routes/users.js");
+const devicesRoute = require("./routes/devices.js");
+
 // passport
 const passport = require("passport");
 const passportConfig = require("./passport");
@@ -46,14 +50,12 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// routing
-const usersRoute = require("./routes/users.js");
-
 app.get("/", (req, res, next) => {
   res.send("<h1>express test</h1>");
 });
 
 app.use("/users", usersRoute);
+app.use("/devices", devicesRoute);
 
 app.listen(PORT, () => {
   console.log(PORT, "번에서 대기 중");
