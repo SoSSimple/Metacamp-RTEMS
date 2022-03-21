@@ -1,24 +1,26 @@
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
+const jwt = require("jsonwebtoken");
 
 const getUsers = async (req, res, next) => {
-  res.status(200).json({
-    data: {
-      success: true,
-      msg: null,
-      userId: "testId",
-      password: "testPwd",
-      email: "test@test.com",
-      role: "worker",
-    },
-  });
-  next();
+  try {
+    const exUser = await User.findAll({});
+    res.status(200).json({
+      data: {
+        success: true,
+        msg: null,
+        exUser,
+      },
+    });
+  } catch (error) {
+    console.error(`getUsers error: ${error}`);
+  }
 };
 
 const signUser = async (req, res, next) => {
   try {
-    const { name, userId, password, email, worker } = req.body;
+    const { name, userId, password, email } = req.body;
     const exUser = await User.findOne({ where: { userId } });
     if (!exUser) {
       // 중복된 아이디가 없다면
@@ -44,12 +46,15 @@ const signUser = async (req, res, next) => {
         },
       });
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error(`signUser error: ${error}`);
+  }
 };
 
 const removeUser = async (req, res) => {};
 const editsUser = async (req, res) => {};
 const editUser = async (req, res) => {};
+
 const loginUser = async (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
     if (authError) {
@@ -65,13 +70,23 @@ const loginUser = async (req, res, next) => {
         console.error(`loginError ${loginError}`);
         return next(loginError);
       }
-      return res.send(`<h1>login success</h1>`);
+      return res.status(201).json({ msg: "로그인 성공" });
     });
   })(req, res, next);
 };
 const logoutUser = async (req, res) => {
-  req.logout();
-  req.session.destroy();
+  try {
+    req.logout();
+    req.session.destroy();
+    return res.status(200).json({
+      data: {
+        success: true,
+        msg: "로그아웃 성공",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 module.exports = {

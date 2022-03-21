@@ -19,7 +19,6 @@ module.exports = () => {
             const result = await bcrypt.compare(password, exUser.password);
             if (result) {
               // passport.authenticate('local', (authError, user))로 전달
-              console.log(exUser);
               done(null, exUser);
             } else {
               done(null, false, { message: "비밀번호가 일치하지 않습니다." });

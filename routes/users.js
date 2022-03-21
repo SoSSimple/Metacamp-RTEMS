@@ -20,7 +20,7 @@ router.patch("/edit", ctrlUsers.editUser);
 // POST /users/login
 router.post("/login", ctrlUsers.loginUser);
 
-// GET /users/logout
-router.get("/logout", ctrlUsers.logoutUser);
+// POST /users/logout
+router.post("/logout", ctrlUsers.logoutUser);
 
 module.exports = router;

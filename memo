@@ -3,9 +3,9 @@ TODO
     - CRUD
       - user
         1. create: 회원가입
-        2. post/patch: 정보수정
+        2. post/patch: 정보수정, 로그인
         3. delete: 회원탈퇴
-        4. get: 회원 조회
+        4. get: 회원조회, 로그아웃
     - database modeling
     - database connetion
     - mvc pattern에 맞게 파일 분리
