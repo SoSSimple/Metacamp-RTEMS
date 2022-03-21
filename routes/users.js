@@ -11,11 +11,8 @@ router.post("/signup", ctrlUsers.signUser);
 // DELETE /users/remove 회원 탈퇴
 router.delete("/remove", ctrlUsers.removeUser);
 
-// POST /users/edits 회원 정보 전체 수정
-router.post("/edits", ctrlUsers.editUser);
-
-// PATCH /users/edit 회원 정보 일부 수정
-router.patch("/edit", ctrlUsers.editUser);
+// POST /users/edit 회원 정보 전체 수정
+router.patch("/edit/:id", ctrlUsers.editUser);
 
 // POST /users/login
 router.post("/login", ctrlUsers.loginUser);

@@ -15,6 +15,7 @@ const getUsers = async (req, res, next) => {
     });
   } catch (error) {
     console.error(`getUsers error: ${error}`);
+    return next(error);
   }
 };
 
@@ -48,10 +49,11 @@ const signUser = async (req, res, next) => {
     }
   } catch (error) {
     console.error(`signUser error: ${error}`);
+    return next(error);
   }
 };
 
-const removeUser = async (req, res) => {
+const removeUser = async (req, res, next) => {
   const userId = req.body.userId;
   try {
     const result = await User.destroy({ where: { userId } });
@@ -64,10 +66,36 @@ const removeUser = async (req, res) => {
     });
   } catch (error) {
     console.error(`removeUser error: ${error}`);
+    return next(error);
   }
 };
-const editsUser = async (req, res) => {};
-const editUser = async (req, res) => {};
+
+const editUser = async (req, res, next) => {
+  const { userId, name, password, role } = req.body;
+  const id = req.params;
+  console.log(id);
+  try {
+    const hash = await bcrypt.hash(password, 12);
+    await User.update(
+      {
+        userId,
+        name,
+        password: hash,
+        role,
+      },
+      { where: id }
+    );
+    res.status(201).json({
+      data: {
+        succes: true,
+        msg: "회원정보 수정 성공",
+      },
+    });
+  } catch (error) {
+    console.error(`editUser error: ${error}`);
+    return next(error);
+  }
+};
 
 const loginUser = async (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
@@ -100,6 +128,7 @@ const loginUser = async (req, res, next) => {
     });
   })(req, res, next);
 };
+
 const logoutUser = async (req, res) => {
   try {
     req.logout();
@@ -112,6 +141,7 @@ const logoutUser = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
+    return next(error);
   }
 };
 
@@ -119,7 +149,6 @@ module.exports = {
   getUsers,
   signUser,
   removeUser,
-  editsUser,
   editUser,
   loginUser,
   logoutUser,
