@@ -66,7 +66,7 @@ const readyDevice = async (req, res, next) => {
   try {
     if (opState.operatingState == 0) {
       await Device.update({ readyState }, { where: { id } });
-      const message = `${!readyState}에서 ${readyState}으로 변경됨`;
+      const message = `${!readyState}에서 ${readyState}로 바뀝니다.`;
       return res.status(201).json({
         data: {
           success: true,
