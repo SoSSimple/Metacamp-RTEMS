@@ -51,7 +51,21 @@ const signUser = async (req, res, next) => {
   }
 };
 
-const removeUser = async (req, res) => {};
+const removeUser = async (req, res) => {
+  const userId = req.body.userId;
+  try {
+    const result = await User.destroy({ where: { userId } });
+    res.status(201).json({
+      data: {
+        success: true,
+        msg: "회원탈퇴 성공",
+        result,
+      },
+    });
+  } catch (error) {
+    console.error(`removeUser error: ${error}`);
+  }
+};
 const editsUser = async (req, res) => {};
 const editUser = async (req, res) => {};
 
@@ -70,7 +84,19 @@ const loginUser = async (req, res, next) => {
         console.error(`loginError ${loginError}`);
         return next(loginError);
       }
-      return res.status(201).json({ msg: "로그인 성공" });
+      let token = "";
+      token = jwt.sign(
+        {
+          userId: user.userId,
+          password: user.password,
+        },
+        "secretkey",
+        {
+          expiresIn: "10m",
+        }
+      );
+      res.setHeader("token", token);
+      return res.status(201).json({ data: { msg: "로그인 성공", token } });
     });
   })(req, res, next);
 };
