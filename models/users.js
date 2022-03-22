@@ -21,6 +21,11 @@ module.exports = class User extends Sequelize.Model {
           type: Sequelize.STRING(100),
           defaultValue: "worker",
         },
+        department: {
+          type: Sequelize.STRING(20),
+          allowNull: true,
+          defaultValue: "dev",
+        },
       },
       {
         sequelize,
@@ -35,6 +40,10 @@ module.exports = class User extends Sequelize.Model {
     );
   }
   static associate(db) {
-    db.User.belongsToMany(db.Device, { through: "deviceLog" });
+    db.User.belongsToMany(db.Device, {
+      through: "DeviceLog",
+      as: "DeviceUserLogs",
+      foreignKey: "UserId",
+    });
   }
 };

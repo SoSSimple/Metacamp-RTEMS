@@ -19,6 +19,24 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+const getUserLog = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: req.body.id });
+    if (user) {
+      // await user.addDeviceUserLogs(parseInt(req.body.deviceId, 10));
+      const resultUserLogs = await user.getDeviceUserLogs({
+        where: req.body.id,
+      });
+      res.status(201).json({ resultUserLogs });
+    } else {
+      res.status(404).send("no user");
+    }
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
 const signUser = async (req, res, next) => {
   try {
     const { name, userId, password, email } = req.body;
@@ -147,6 +165,7 @@ const logoutUser = async (req, res) => {
 
 module.exports = {
   getUsers,
+  getUserLog,
   signUser,
   removeUser,
   editUser,

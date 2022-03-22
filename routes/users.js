@@ -5,6 +5,10 @@ const ctrlUsers = require("../controller/ctrl.users.js");
 // GET /users 회원 조회
 router.get("/", ctrlUsers.getUsers);
 
+// GET /users/log 유저가 장비를 사용한 이력 가져오기
+// body -> id
+router.get("/log", ctrlUsers.getUserLog);
+
 // POST /users/signup 회원 가입
 router.post("/signup", ctrlUsers.signUser);
 

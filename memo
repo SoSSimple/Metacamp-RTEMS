@@ -10,8 +10,11 @@ TODO
       deviceLog 접근 -> "db.sequelize.models.deviceLog"
     - database connetion (v)
     - mvc pattern에 맞게 파일 분리 (v)
-  
-  * 대기
+
+  * 3/22 (화)
+    - database modeling
     - 부서 관련 기능
+      - 부서 등록
+      - 부서 변경
     - 설비 관련 기능
     - 실시간 데이터 모니터링 관련 데이터 모델링
