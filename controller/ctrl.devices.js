@@ -119,6 +119,7 @@ const operatingDevice = async (req, res, next) => {
         const user = await User.findOne({ where: userId });
         if (user) {
           await user.addDeviceUserLogs(parseInt(deviceId, 10));
+          await Device.update({ operatingState }, { where: { id: deviceId } });
           return res.status(201).json({
             data: {
               success: true,
@@ -134,13 +135,13 @@ const operatingDevice = async (req, res, next) => {
           });
         }
       } else {
-        const opState = await Device.findOne({ where: id });
+        const opState = await Device.findOne({ where: { id: deviceId } });
         if (opState.operatingState == operatingState) {
           return res
             .status(409)
             .json({ msg: "현재 이미 비가동중인 상태입니다." });
         }
-        await Device.update({ operatingState }, { where: { id } });
+        await Device.update({ operatingState }, { where: { id: deviceId } });
         return res.status(201).json({
           data: {
             success: true,
