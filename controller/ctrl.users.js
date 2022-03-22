@@ -148,19 +148,14 @@ const loginUser = async (req, res, next) => {
 };
 
 const logoutUser = async (req, res) => {
-  try {
-    req.logout();
-    req.session.destroy();
-    return res.status(200).json({
-      data: {
-        success: true,
-        msg: "로그아웃 성공",
-      },
-    });
-  } catch (error) {
-    console.error(error);
-    return next(error);
-  }
+  req.logout();
+  req.session.destroy();
+  return res.status(200).json({
+    data: {
+      success: true,
+      msg: "로그아웃 성공",
+    },
+  });
 };
 
 module.exports = {
