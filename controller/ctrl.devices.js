@@ -1,5 +1,6 @@
 const Device = require("../models/devices.js");
 const User = require("../models/users.js");
+const Result = require("../models/results.js");
 
 const getDevices = async (req, res, next) => {
   try {
@@ -119,7 +120,11 @@ const operatingDevice = async (req, res, next) => {
         const user = await User.findOne({ where: userId });
         if (user) {
           await user.addDeviceUserLogs(parseInt(deviceId, 10));
-          await Device.update({ operatingState }, { where: { id: deviceId } });
+          await Device.update(
+            { operatingState, startedAt: Date.now() },
+            { where: { id: deviceId } }
+          );
+
           return res.status(201).json({
             data: {
               success: true,
@@ -162,6 +167,49 @@ const operatingDevice = async (req, res, next) => {
   }
 };
 
+const completed = async (req, res, next) => {
+  const { userId, deviceId, total, failedCount } = req.body;
+  const bool = false;
+  const device = await Device.findOne({ where: deviceId });
+  try {
+    if (!device) {
+      return res.status(409).json({
+        data: {
+          success: false,
+          msg: "가동중인 장비가 아닙니다.",
+        },
+      });
+    }
+    console.log("here1");
+    const yield = (total - failedCount) / total;
+    const date = await Device.findOne(
+      { where: deviceId },
+      { attributes: ["startedAt"] }
+    );
+
+    await Device.update({ operatingState: bool }, { where: { id: deviceId } });
+    await Result.create({
+      userId,
+      deviceId,
+      total,
+      failedCount,
+      yield,
+      startedAt: date["startedAt"],
+      endedAt: Date.now(),
+    });
+
+    /** 마지막 로직 */
+    return res.status(201).json({
+      data: {
+        success: true,
+        msg: "장비 가동을 완료합니다.",
+      },
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 module.exports = {
   getDevices,
   getDevice,
@@ -169,4 +217,5 @@ module.exports = {
   createDevice,
   readyDevice,
   operatingDevice,
+  completed,
 };

@@ -16,6 +16,10 @@ module.exports = class Device extends Sequelize.Model {
           type: Sequelize.BOOLEAN,
           defaultValue: 0,
         },
+        startedAt: {
+          type: Sequelize.DATE,
+          allowNull: true,
+        },
       },
       {
         sequelize,

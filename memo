@@ -7,7 +7,7 @@ TODO
         3. delete: 회원탈퇴 (v)
         4. get: 회원조회, 로그아웃 (v)
     - database modeling (진행중)
-      deviceLog 접근 -> "db.sequelize.models.deviceLog"
+      DeviceLog 접근 -> "db.sequelize.models.DeviceLog"
     - database connetion (v)
     - mvc pattern에 맞게 파일 분리 (v)
 

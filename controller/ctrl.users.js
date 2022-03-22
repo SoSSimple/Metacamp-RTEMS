@@ -147,7 +147,7 @@ const loginUser = async (req, res, next) => {
   })(req, res, next);
 };
 
-const logoutUser = async (req, res) => {
+const logoutUser = (req, res) => {
   req.logout();
   req.session.destroy();
   return res.status(200).json({
