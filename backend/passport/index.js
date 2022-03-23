@@ -4,12 +4,16 @@ const User = require("../models/users");
 
 module.exports = () => {
   passport.serializeUser((user, done) => {
-    done(null, user.userId);
+    console.log(user.userId);
+    done(null, user.userId); // session에 저장
   });
 
   passport.deserializeUser((id, done) => {
     User.findOne({ where: { id } })
-      .then((user) => done(null, user))
+      .then((user) => {
+        console.log(user);
+        done(null, user);
+      })
       .catch((err) => done(err));
   });
 

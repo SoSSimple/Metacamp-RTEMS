@@ -18,6 +18,9 @@ router.post("/create", ctrlDevices.createDevice);
 // POST /devices/completed
 router.post("/completed", ctrlDevices.completed);
 
+// POST /devices/pause
+router.post("/pause", ctrlDevices.pause);
+
 // PATCH /devices/ready 특정 장비의 준비상태 바꾸기
 router.patch("/ready", ctrlDevices.readyDevice);
 

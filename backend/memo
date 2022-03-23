@@ -19,3 +19,20 @@ TODO
     - 설비 관련 기능(v)
         - result table 만들기
     - 실시간 데이터 모니터링 관련 데이터 모델링
+
+  * 3/23 (수)
+    - mqtt & broker 공부 (v)
+    - WebGL 공부
+    - nunjucks로 간단한 화면 구성
+    - docker 공부
+    - 로그인 과정(인증, 검증 보강)
+
+  보류 내용들
+    - 설비, 부서, 회원 수정
+    - body로 받아오는 값들의 이름들 통일: userId, deviceId(많이 헷갈림)
+    - /devices/completed : operating을 누른 회원만 completed 상태로 바꿀 수 있게 수정
+    - mqtt & broker 공부
+  
+  보강할 내용들
+    - 로그인
+      - passport, jwt 인증, jwt 검증(https://chanyeong.com/blog/post/28

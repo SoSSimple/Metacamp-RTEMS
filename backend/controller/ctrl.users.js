@@ -3,6 +3,12 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
+const userSession = (req, res, next) => {
+  console.log("user session 등록", req.user);
+  res.locals.user = req.user;
+  next();
+};
+
 const getUsers = async (req, res, next) => {
   try {
     const exUser = await User.findAll({});
@@ -43,12 +49,6 @@ const signUser = async (req, res, next) => {
     const exUser = await User.findOne({ where: { userId } });
     if (!exUser) {
       // 중복된 아이디가 없다면
-      res.status(201).json({
-        data: {
-          success: true,
-          msg: "가입 성공",
-        },
-      });
       const hash = await bcrypt.hash(password, 12);
       await User.create({
         name,
@@ -56,9 +56,15 @@ const signUser = async (req, res, next) => {
         password: hash,
         email,
       });
+      return res.status(201).json({
+        data: {
+          success: true,
+          msg: "가입 성공",
+        },
+      });
     } else {
       // 중복되는 아이디가 있으면
-      res.status(401).json({
+      return res.status(401).json({
         data: {
           success: false,
           msg: "이미 가입된 회원",
@@ -122,12 +128,10 @@ const loginUser = async (req, res, next) => {
       return next(authError);
     }
     if (!user) {
-      console.log(user);
-      return res.send("<h1>id 혹은 password가 일치하지 않음</h1>");
+      return res.status(401).json({ data: { msg: info.message } });
     }
     return req.login(user, (loginError) => {
       if (loginError) {
-        console.error(`loginError ${loginError}`);
         return next(loginError);
       }
       let token = "";
@@ -159,6 +163,7 @@ const logoutUser = (req, res) => {
 };
 
 module.exports = {
+  userSession,
   getUsers,
   getUserLog,
   signUser,

@@ -13,6 +13,7 @@ const getDevices = async (req, res, next) => {
     });
   } catch (error) {
     console.error(`getDevices error: ${error}`);
+    return next(error);
   }
 };
 
@@ -37,6 +38,7 @@ const getDevice = async (req, res, next) => {
     }
   } catch (error) {
     console.error(`getDevice error: ${error}`);
+    return next(error);
   }
 };
 
@@ -53,7 +55,7 @@ const getDeviceLog = async (req, res, next) => {
     }
   } catch (error) {
     console.error(error);
-    next(error);
+    return next(error);
   }
 };
 
@@ -186,7 +188,6 @@ const completed = async (req, res, next) => {
       { where: deviceId },
       { attributes: ["startedAt"] }
     );
-
     await Device.update({ operatingState: bool }, { where: { id: deviceId } });
     await Result.create({
       userId,
@@ -197,8 +198,6 @@ const completed = async (req, res, next) => {
       startedAt: date["startedAt"],
       endedAt: Date.now(),
     });
-
-    /** 마지막 로직 */
     return res.status(201).json({
       data: {
         success: true,
@@ -207,6 +206,17 @@ const completed = async (req, res, next) => {
     });
   } catch (error) {
     console.error(error);
+    return next(error);
+  }
+};
+
+const pause = async (req, res, next) => {
+  const { deviceId } = req.body;
+  try {
+    const exDevice = await Device.findOne({ where: { deviceId } });
+    console.log(exDevice);
+  } catch (error) {
+    return next(error);
   }
 };
 
@@ -218,4 +228,5 @@ module.exports = {
   readyDevice,
   operatingDevice,
   completed,
+  pause,
 };
