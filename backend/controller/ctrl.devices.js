@@ -235,19 +235,29 @@ const paused = async (req, res, next) => {
       });
     } else {
       const userId = await exDevice.getDeviceLogs({
-        // attributes: ["UserId"],
-        where: { DeviceId: deviceId },
+        attributes: ["UserId"],
+        setQuery: {
+          where: req.body.deviceId,
+          order: [["createdAt", "DESC"]],
+        },
+        limit: 1,
       });
-      console.log(userId);
-      // await Device.update(
-      //   { operatingState: false },
-      //   { where: { id: deviceId } }
-      // );
-      // await Pause.create({
-      //   userId,
-      //   deviceId,
-      // });
-      return res.status(200).json({});
+      await Device.update(
+        { operatingState: false, readyState: false },
+        { where: { id: deviceId } }
+      );
+      const exUserId = userId[0].dataValues.DeviceLog.dataValues.UserId;
+      console.log(exUserId);
+      await Pause.create({
+        userId: exUserId,
+        deviceId,
+      });
+      return res.status(200).json({
+        data: {
+          success: true,
+          msg: "가동설비 비상정지 완료(준비/가동상태 off로 전환)",
+        },
+      });
     }
   } catch (error) {
     return next(error);

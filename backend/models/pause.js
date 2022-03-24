@@ -5,21 +5,17 @@ module.exports = class Pause extends Sequelize.Model {
     return super.init(
       {
         userId: {
-          type: Sequelize.INTEGER,
+          type: Sequelize.STRING(20),
           allowNull: false,
         },
         deviceId: {
-          type: Sequelize.INTEGER,
-          allowNull: false,
-        },
-        pausedAt: {
-          type: Sequelize.DATE,
+          type: Sequelize.STRING(20),
           allowNull: false,
         },
       },
       {
         sequelize,
-        timestamps: false,
+        timestamps: true,
         underscored: false,
         modelName: "Pause",
         tableName: "pauses",
