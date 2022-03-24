@@ -1,0 +1,30 @@
+[
+  {
+    "name": "login",
+    "path": "/login",
+    "component": "C:\\\\Users\\\\user\\\\Desktop\\\\개인 프로젝트\\\\firstProject\\\\ch01\\\\front\\\\pages\\\\login.vue",
+    "chunkName": "pages/login",
+    "_name": "_a92e20d4"
+  },
+  {
+    "name": "profile",
+    "path": "/profile",
+    "component": "C:\\\\Users\\\\user\\\\Desktop\\\\개인 프로젝트\\\\firstProject\\\\ch01\\\\front\\\\pages\\\\profile.vue",
+    "chunkName": "pages/profile",
+    "_name": "_70183896"
+  },
+  {
+    "name": "signUp",
+    "path": "/signUp",
+    "component": "C:\\\\Users\\\\user\\\\Desktop\\\\개인 프로젝트\\\\firstProject\\\\ch01\\\\front\\\\pages\\\\signUp.vue",
+    "chunkName": "pages/signUp",
+    "_name": "_5118474a"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "C:\\\\Users\\\\user\\\\Desktop\\\\개인 프로젝트\\\\firstProject\\\\ch01\\\\front\\\\pages\\\\index.vue",
+    "chunkName": "pages/index",
+    "_name": "_3c7d6702"
+  }
+]
