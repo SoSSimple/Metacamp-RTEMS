@@ -5,9 +5,10 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const nunjucks = require("nunjucks");
+const cors = require("cors");
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
 // routing
 const usersRoute = require("./routes/users.js");
@@ -37,14 +38,16 @@ nunjucks.configure("views", {
   watch: true,
 });
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:8080");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "OPTIONS, GET, POST, PUT, DELETE"
-  );
-  next();
-});
+app.use(cors("http://localhost:3000"));
+
+// app.use((req, res, next) => {
+//   res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+//   res.setHeader(
+//     "Access-Control-Allow-Methods",
+//     "OPTIONS, GET, POST, PUT, DELETE"
+//   );
+//   next();
+// });
 
 app.use(morgan("dev"));
 
