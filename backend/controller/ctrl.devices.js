@@ -1,6 +1,7 @@
 const Device = require("../models/devices.js");
 const User = require("../models/users.js");
 const Result = require("../models/results.js");
+const Pause = require("../models/pause.js");
 
 const getDevices = async (req, res, next) => {
   try {
@@ -97,6 +98,7 @@ const readyDevice = async (req, res, next) => {
     } else {
       return res.status(409).json({
         data: {
+          success: false,
           msg: "장비가 가동중인 상태에서는 준비상태를 바꿀 수 없습니다.",
         },
       });
@@ -115,9 +117,9 @@ const operatingDevice = async (req, res, next) => {
     if (opState.readyState == 1) {
       if (operatingState === 1) {
         if (opState.operatingState == operatingState) {
-          return res
-            .status(409)
-            .json({ msg: "현재 이미 가동중인 상태입니다." });
+          return res.status(409).json({
+            data: { success: false, msg: "현재 이미 가동중인 상태입니다." },
+          });
         }
         const user = await User.findOne({ where: userId });
         if (user) {
@@ -144,9 +146,9 @@ const operatingDevice = async (req, res, next) => {
       } else {
         const opState = await Device.findOne({ where: { id: deviceId } });
         if (opState.operatingState == operatingState) {
-          return res
-            .status(409)
-            .json({ msg: "현재 이미 비가동중인 상태입니다." });
+          return res.status(409).json({
+            data: { success: false, msg: "현재 이미 비가동중인 상태입니다." },
+          });
         }
         await Device.update({ operatingState }, { where: { id: deviceId } });
         return res.status(201).json({
@@ -159,6 +161,7 @@ const operatingDevice = async (req, res, next) => {
     } else {
       return res.status(409).json({
         data: {
+          success: false,
           msg: "해당 장비의 상태가 준비상태가 되어있을 때 가동 시킬 수 있습니다.",
         },
       });
@@ -210,11 +213,42 @@ const completed = async (req, res, next) => {
   }
 };
 
-const pause = async (req, res, next) => {
+const paused = async (req, res, next) => {
   const { deviceId } = req.body;
+  const exDevice = await Device.findOne({ where: { id: deviceId } });
   try {
-    const exDevice = await Device.findOne({ where: { id: deviceId } });
-    console.log(exDevice);
+    if (!exDevice) {
+      return res.status(400).json({
+        data: {
+          success: false,
+          msg: "해당 장비가 존재하지 않습니다.",
+        },
+      });
+    }
+
+    if (exDevice["operatingState"] == false) {
+      return res.status(409).json({
+        data: {
+          success: false,
+          msg: "해당 장비는 현재 가동중인 장비가 아닙니다.",
+        },
+      });
+    } else {
+      const userId = await exDevice.getDeviceLogs({
+        // attributes: ["UserId"],
+        where: { DeviceId: deviceId },
+      });
+      console.log(userId);
+      // await Device.update(
+      //   { operatingState: false },
+      //   { where: { id: deviceId } }
+      // );
+      // await Pause.create({
+      //   userId,
+      //   deviceId,
+      // });
+      return res.status(200).json({});
+    }
   } catch (error) {
     return next(error);
   }
@@ -228,5 +262,5 @@ module.exports = {
   readyDevice,
   operatingDevice,
   completed,
-  pause,
+  paused,
 };
