@@ -27,15 +27,22 @@ const getUsers = async (req, res, next) => {
 
 const getUserLog = async (req, res, next) => {
   try {
-    const user = await User.findOne({ where: req.body.id });
+    const user = await User.findOne({ where: req.body.userId });
     if (user) {
-      // await user.addDeviceUserLogs(parseInt(req.body.deviceId, 10));
       const resultUserLogs = await user.getDeviceUserLogs({
-        where: req.body.id,
+        where: req.body.userId,
       });
-      res.status(201).json({ resultUserLogs });
+      res.status(201).json({
+        data: {
+          success: true,
+          msg: "유저의 장비 로그 가져오기",
+          resultUserLogs,
+        },
+      });
     } else {
-      res.status(404).send("no user");
+      res
+        .status(404)
+        .json({ data: { success: false, msg: "존재하지 않는 회원" } });
     }
   } catch (error) {
     console.error(error);
@@ -96,8 +103,8 @@ const removeUser = async (req, res, next) => {
 
 const editUser = async (req, res, next) => {
   const { userId, name, password, role } = req.body;
-  const id = req.params;
-  console.log(id);
+  const paramId = req.params;
+  console.log(paramId);
   try {
     const hash = await bcrypt.hash(password, 12);
     await User.update(
@@ -107,7 +114,7 @@ const editUser = async (req, res, next) => {
         password: hash,
         role,
       },
-      { where: id }
+      { where: paramId }
     );
     res.status(201).json({
       data: {
@@ -128,7 +135,9 @@ const loginUser = async (req, res, next) => {
       return next(authError);
     }
     if (!user) {
-      return res.status(401).json({ data: { msg: info.message } });
+      return res
+        .status(401)
+        .json({ data: { success: false, msg: info.message } });
     }
     return req.login(user, (loginError) => {
       if (loginError) {
@@ -146,7 +155,9 @@ const loginUser = async (req, res, next) => {
         }
       );
       res.setHeader("token", token);
-      return res.status(201).json({ data: { msg: "로그인 성공", token } });
+      return res
+        .status(201)
+        .json({ data: { success: true, msg: "로그인 성공", token } });
     });
   })(req, res, next);
 };

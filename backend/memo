@@ -6,7 +6,7 @@ TODO
         2. post/patch: 정보수정, 로그인 (v)
         3. delete: 회원탈퇴 (v)
         4. get: 회원조회, 로그아웃 (v)
-    - database modeling (진행중)
+    - database modeling (v)
       DeviceLog 접근 -> "db.sequelize.models.DeviceLog"
     - database connetion (v)
     - mvc pattern에 맞게 파일 분리 (v)
@@ -17,7 +17,7 @@ TODO
       - 부서 등록(v)
       - 부서 변경(-)
     - 설비 관련 기능(v)
-        - result table 만들기
+        - result table 만들기(v)
     - 실시간 데이터 모니터링 관련 데이터 모델링
 
   * 3/23 (수)
@@ -27,12 +27,7 @@ TODO
     - docker 공부
     - 로그인 과정(인증, 검증 보강)
 
-  보류 내용들
-    - 설비, 부서, 회원 수정
+  * 3/24 (목)
     - body로 받아오는 값들의 이름들 통일: userId, deviceId(많이 헷갈림)
-    - /devices/completed : operating을 누른 회원만 completed 상태로 바꿀 수 있게 수정
+    - passport, jwt 인증, jwt 검증(https://chanyeong.com/blog/post/28)
     - mqtt & broker 공부
-  
-  보강할 내용들
-    - 로그인
-      - passport, jwt 인증, jwt 검증(https://chanyeong.com/blog/post/28

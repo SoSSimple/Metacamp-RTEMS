@@ -7,7 +7,7 @@ const ctrlDevices = require("../controller/ctrl.devices.js");
 router.get("/", ctrlDevices.getDevices);
 
 // GET /devices/:id/deviced id로 특정 장비만 가져오기
-router.get("/:id/deviced", ctrlDevices.getDevice);
+router.get("/:id/device", ctrlDevices.getDevice);
 
 // GET /devices/log 사용된 장비의 이력 가져오기
 router.get("/log", ctrlDevices.getDeviceLog);

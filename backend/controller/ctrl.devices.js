@@ -18,9 +18,9 @@ const getDevices = async (req, res, next) => {
 };
 
 const getDevice = async (req, res, next) => {
-  const id = req.params.id;
+  const paramId = req.params.id;
   try {
-    const exDevice = await Device.findOne({ where: { id } });
+    const exDevice = await Device.findOne({ where: { id: paramId } });
     if (exDevice) {
       return res.status(200).json({
         data: {
@@ -47,7 +47,7 @@ const getDeviceLog = async (req, res, next) => {
     const device = await Device.findOne({ where: req.body.deviceId });
     if (device) {
       const resultDeviceLogs = await device.getDeviceLogs({
-        where: req.body.id,
+        where: req.body.userId,
       });
       res.status(201).json({ resultDeviceLogs });
     } else {
@@ -82,11 +82,11 @@ const createDevice = async (req, res, next) => {
 };
 
 const readyDevice = async (req, res, next) => {
-  const { readyState, id } = req.body;
-  const opState = await Device.findOne({ where: id });
+  const { readyState, deviceId } = req.body;
+  const opState = await Device.findOne({ where: { id: deviceId } });
   try {
     if (opState.operatingState == 0) {
-      await Device.update({ readyState }, { where: { id } });
+      await Device.update({ readyState }, { where: { id: deviceId } });
       const message = `${!readyState}에서 ${readyState}로 바뀝니다.`;
       return res.status(201).json({
         data: {
@@ -213,7 +213,7 @@ const completed = async (req, res, next) => {
 const pause = async (req, res, next) => {
   const { deviceId } = req.body;
   try {
-    const exDevice = await Device.findOne({ where: { deviceId } });
+    const exDevice = await Device.findOne({ where: { id: deviceId } });
     console.log(exDevice);
   } catch (error) {
     return next(error);
