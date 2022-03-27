@@ -31,3 +31,6 @@ TODO
     - body로 받아오는 값들의 이름들 통일: userId, deviceId(많이 헷갈림)
     - passport, jwt 인증, jwt 검증(https://chanyeong.com/blog/post/28)
     - mqtt & broker 공부
+
+  * 보강해야 할 내용들
+    - 완료 요청 -> 가동중이 아닐 때 예외처리
