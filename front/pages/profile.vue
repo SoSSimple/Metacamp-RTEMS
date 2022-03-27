@@ -14,6 +14,7 @@
     head: {
 		  title: '프로필페이지'
 	},
+  middleware: 'authenticated',
   }
 </script>
 

@@ -103,6 +103,7 @@
         } 
       }
     },
+    middleware: 'anonymous',
   };
 </script>
 

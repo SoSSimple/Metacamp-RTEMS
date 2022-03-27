@@ -64,7 +64,8 @@
             })        
         } 
       } 
-    }
+    },
+    middleware: 'anonymous',
   }
 
 </script>
