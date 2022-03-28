@@ -52,7 +52,6 @@
           this.$store.dispatch('users/login', {
             userId: this.userId,
             password: this.password,
-            name: '윤희영'
           })
             .then(() => {
               this.$router.push({

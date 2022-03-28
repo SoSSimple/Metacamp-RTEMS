@@ -4,6 +4,7 @@
       유저정보
       <v-spacer />
       <v-text-field
+        :style="{ maxWidth: '300px'}"
         append-icon="mdi-magnify"
         label="Search"
         single-line
@@ -45,16 +46,14 @@ export default {
       headers: [
         { text: "name", value: "name" },
         { text: "userId", value: "userId" },
-        { text: "rold", value: "rold" },
+        { text: "role", value: "role" },
         { text: "department", value: "department" },
         { text: "edit", value: "edit" },
         { text: "delete", value: "delete" },
       ],
     };
   },
-  fetch({ store }) {
-    store.dispatch("users/loadUsers", "test-fetch");
-  },
+  
   computed: {
     mainUsers() {
       return this.$store.state.users.mainUsers;
@@ -62,6 +61,9 @@ export default {
     hasMoreUser() {
       return this.$store.state.users.hasMoreUser;
     },
+  },
+  fetch({ store }) {
+    store.dispatch("users/loadUsers");
   },
   mounted() {
     window.addEventListener("scroll", this.onScroll);
@@ -71,17 +73,14 @@ export default {
   },
   methods: {
     onScroll() {
-      if (
-        window.scrollY + document.documentElement.clientHeight >
-        document.documentElement.scrollHeight - 300
-      ) {
+      if (window.scrollY + document.documentElement.clientHeight > document.documentElement.scrollHeight - 300) {
         if (this.hasMoreUser) {
-          this.$store.dispatch("users/loadUsers", "test-dispatch");
+          this.$store.dispatch("users/loadUsers");
         }
       }
     },
   },
-};
+}
 </script>
 
 <style scoped></style>

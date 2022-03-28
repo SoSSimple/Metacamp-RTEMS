@@ -22,7 +22,6 @@
             <v-text-field
               v-model="name"
               label="이름"
-              type="password"
               :rules="nameRules"
               required
             />
@@ -89,16 +88,19 @@
           // actions dispatch
           this.$store.dispatch('users/signUp', {
             name: this.name,
-            userId: this.userId
+            userId: this.userId,
+            password: this.password,
+            department: this.department,
+            role: this.role,
           })
           .then(() => {
               this.$router.push({
                 path: '/'
               })
             })
-            .catch(() => {
-              alert('회원가입 실패')
-            })  
+          .catch(() => {
+            alert('회원가입 실패')
+          })  
         } 
       }
     },

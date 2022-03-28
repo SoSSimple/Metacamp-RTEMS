@@ -36,26 +36,55 @@ export const mutations = {
 export const actions = {
   // signUp(context, payload) {
   signUp({ commit }, payload) {
-    commit("setMe", payload);
+    this.$axios.post('http://localhost:8080/users/signup', {
+      name: payload.name,
+      userId: payload.userId,
+      password: payload.password,
+      department: payload.department,
+      role: payload.role
+    }).then((res) => {
+      console.log(res)
+      commit("setMe", res);
+    }).catch((err) => {
+      console.error(err)
+    })
   },
+
   login({ commit }, payload) {
-    commit("setMe", payload);
+    this.$axios.post('http://localhost:8080/users/login',{
+      userId: payload.userId,
+      password: payload.password
+    }).then((res) => {
+      console.log(res) // department, name, userId, role
+      commit('setMe', res)
+    }).catch((err) => {
+      console.error(err)
+    })
   },
+
   logOut({ commit }, payload) {
-    commit("setMe", null);
-  },
-  loadUsers({ commit, state }, payload) {
-    if (state.hasMoreUser) {
-      console.log(payload);
-      this.$axios
-        .get("http://localhost:8080/users/")
-        .then((res) => {
-          console.log(res);
-          commit("loadUsers", res.data.data.exUser);
+    this.$axios.post('http://localhost:8080/users/logout')
+      .then(() => {
+        console.log('로그아웃 성공')
+        commit("setMe", null);
+        this.$router.push({
+          path: '/'
         })
-        .catch((err) => {
-          console.error(err);
-        });
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  },
+
+  loadUsers({ commit, state }) {
+    if (state.hasMoreUser) {
+      this.$axios.get("http://localhost:8080/users")
+      .then((res) => {
+        commit("loadUsers", res.data.data.exUser);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
     }
   },
 };
