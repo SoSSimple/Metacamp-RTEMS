@@ -35,8 +35,8 @@
         </v-toolbar-items>
       </v-toolbar>
     </nav>
-    <v-row>
-      <!-- <v-col cols="12" md="2">
+    <!-- <v-row> -->
+    <!-- <v-col cols="12" md="2">
         <v-sheet
           height="100vh"
           class="overflow-hidden"
@@ -76,7 +76,7 @@
         </v-sheet>
       </v-col>
       <v-col cols="12" md="10"> -->
-      <nuxt />
+    <nuxt />
       <!-- </v-col> -->
     </v-row>
   </v-app>

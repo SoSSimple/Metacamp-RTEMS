@@ -1,58 +1,57 @@
 <template>
-  <div>
-    <v-container :style="{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}">
-      <v-card :style="{ width: '500px'}">
-        <v-container>
-          <v-subheader>회원가입</v-subheader>
-          <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
-            <v-container>
-              <v-text-field
-                v-model="userId"
-                label="아이디"
-                type="email"
-                :rules="userIdRules"
-                required
-              />
-              <v-text-field
-                v-model="password"
-                label="비밀번호"
-                type="password"
-                :rules="passwordRules"
-                required
-              />
-              <v-text-field
-                v-model="name"
-                label="이름"
-                type="password"
-                :rules="nameRules"
-                required
-              />
-              <v-select
-                :items="department"
-                label="부서"
-                :rules="departmentRules"
-                solo
-              />
-              <v-select
-                :items="role"
-                label="역할"
-                :rules="roleRules"
-                solo
-              />
-              <v-container :style="{ display: 'flex', justifyContent:'flex-end'}">
-                <v-btn type="submit">가입하기</v-btn>
-              </v-container>
-              <v-container />
+  <v-container :style="{ width: '100vw', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center'}">
+    <v-card :style="{ width: '500px'}">
+      <v-container>
+        <v-subheader>회원가입</v-subheader>
+        <v-form ref="form" v-model="valid" @submit.prevent="onSubmitForm">
+          <v-container>
+            <v-text-field
+              v-model="userId"
+              label="아이디"
+              type="email"
+              :rules="userIdRules"
+              required
+            />
+            <v-text-field
+              v-model="password"
+              label="비밀번호"
+              type="password"
+              :rules="passwordRules"
+              required
+            />
+            <v-text-field
+              v-model="name"
+              label="이름"
+              type="password"
+              :rules="nameRules"
+              required
+            />
+            <v-select
+              :items="department"
+              label="부서"
+              :rules="departmentRules"
+              solo
+            />
+            <v-select
+              :items="role"
+              label="역할"
+              :rules="roleRules"
+              solo
+            />
+            <v-container :style="{ display: 'flex', justifyContent:'flex-end'}">
+              <v-btn type="submit">가입하기</v-btn>
             </v-container>
-          </v-form>
-        </v-container>
-      </v-card>
-    </v-container>
-  </div>
+            <v-container />
+          </v-container>
+        </v-form>
+      </v-container>
+    </v-card>
+  </v-container>
 </template>
 
 <script>
   export default {
+    middleware: 'anonymous',
     data() {
       return {
         valid: false,
@@ -103,7 +102,6 @@
         } 
       }
     },
-    middleware: 'anonymous',
   };
 </script>
 
