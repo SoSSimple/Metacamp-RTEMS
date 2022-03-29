@@ -29,13 +29,13 @@
               :items="department"
               label="부서"
               :rules="departmentRules"
-              solo
+              required
             />
             <v-select
               :items="role"
               label="역할"
               :rules="roleRules"
-              solo
+              required
             />
             <v-container :style="{ display: 'flex', justifyContent:'flex-end'}">
               <v-btn type="submit">가입하기</v-btn>

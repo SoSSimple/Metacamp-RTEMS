@@ -32,6 +32,7 @@
 </template>
 <script>
   export default {
+    middleware: 'anonymous',
     data(){
       return {
         valid: false,
@@ -62,7 +63,6 @@
         }
       } 
     },
-    middleware: 'anonymous',
   }
 
 </script>

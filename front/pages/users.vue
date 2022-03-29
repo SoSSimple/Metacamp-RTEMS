@@ -25,14 +25,14 @@
           <td>{{ row.item.role }}</td>
           <td>{{ row.item.department }}</td>
           <td>
-            <v-icon color="black" dark @click="onEdit(row.item)"
-              >mdi-pencil</v-icon
-            >
+            <v-icon color="black" dark @click="onEdit(row.item)">
+              mdi-pencil
+            </v-icon>
           </td>
           <td>
-            <v-icon color="black" dark @click="onDelete(row.item)"
-              >mdi-delete</v-icon
-            >
+            <v-icon color="black" dark @click="onDelete(row.item)">
+              mdi-delete
+            </v-icon>
           </td>
         </tr>
       </template>
@@ -53,6 +53,9 @@ export default {
       ],
     };
   },
+  fetch({ store }) {
+    store.dispatch("users/loadUsers");
+  },
   
   computed: {
     mainUsers() {
@@ -61,9 +64,6 @@ export default {
     hasMoreUser() {
       return this.$store.state.users.hasMoreUser;
     },
-  },
-  fetch({ store }) {
-    store.dispatch("users/loadUsers");
   },
   mounted() {
     window.addEventListener("scroll", this.onScroll);

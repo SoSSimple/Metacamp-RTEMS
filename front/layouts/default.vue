@@ -2,7 +2,7 @@
   <v-app>
     <nav v-if="!me">
       <v-toolbar dark color="black">
-        <v-app-bar-nav-icon @click="onDrawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="onDrawer" />
         <v-toolbar-title>
           <nuxt-link to="/">메인페이지</nuxt-link>
         </v-toolbar-title>
@@ -20,7 +20,7 @@
     </nav>
     <nav v-else>
       <v-toolbar dark color="black">
-      <v-app-bar-nav-icon @click="onDrawer"></v-app-bar-nav-icon>
+        <v-app-bar-nav-icon @click="onDrawer" />
         <v-toolbar-title>
           <nuxt-link to="/">메인페이지</nuxt-link>
         </v-toolbar-title>
@@ -38,10 +38,10 @@
       </v-toolbar>
     </nav>
     <v-navigation-drawer
+      v-if="!me"
       v-model="drawer"
       absolute
       temporary
-      v-if="!me"
     >
       <v-list dense>
         <v-list-item
@@ -59,15 +59,15 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-     <v-navigation-drawer
+    <v-navigation-drawer
+      v-else
       v-model="drawer"
       absolute
       temporary
-      v-else
     >
       <v-list-item>
         <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/78.jpg"></v-img>
+          <v-img src="https://randomuser.me/api/portraits/men/78.jpg" />
         </v-list-item-avatar>
 
         <v-list-item-content>
@@ -103,6 +103,10 @@
           items: [
             { title: 'Home', icon: 'mdi-view-dashboard', path: "/", },
             { title: 'WebGl', icon: 'mdi-forum', path: 'webgl'},
+            { title: 'Users', icon: 'mdi-forum', path: 'users'},
+            { title: 'Equipment', icon: 'mdi-forum', path: 'equipment'},
+            { title: 'Record', icon: 'mdi-forum', path: 'record'},
+            { title: 'Work order', icon: 'mdi-forum', path: 'workorder'},
           ],
         }
       },
