@@ -7,12 +7,16 @@ const session = require("express-session");
 const nunjucks = require("nunjucks");
 const cors = require("cors");
 
+const Influx = require("influx");
+const os = require("os");
+
 const app = express();
 const PORT = 8080;
 
 // routing
 const usersRoute = require("./routes/users.js");
 const devicesRoute = require("./routes/devices.js");
+const influxRoute = require("./routes/influx.js");
 
 // passport
 const passport = require("passport");
@@ -27,6 +31,33 @@ sequelize
   })
   .catch((err) => {
     console.error(`database connection failed ${err}`);
+  });
+
+// InfluxDB
+const influx = new Influx.InfluxDB({
+  host: "localhost",
+  database: "database_rtems",
+  schema: [
+    {
+      measurement: "response",
+      fields: {
+        path: Influx.FieldType.STRING,
+        time: Influx.FieldType.INTEGER,
+      },
+      tags: ["host"],
+    },
+  ],
+});
+
+influx
+  .getDatabaseNames()
+  .then((names) => {
+    if (!names.includes("database_rtems")) {
+      return influx.createDatabase("database_rtems");
+    }
+  })
+  .catch((err) => {
+    console.error(`error creating influx database ${err}`);
   });
 
 // passport set
@@ -74,6 +105,7 @@ app.get("/", (req, res, next) => {
   res.send("<h1>express test</h1>");
 });
 
+app.use("/influx", influxRoute);
 app.use("/users", usersRoute);
 app.use("/devices", devicesRoute);
 
