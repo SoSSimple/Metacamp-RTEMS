@@ -54,14 +54,12 @@
             password: this.password,
           })
             .then(() => {
-              this.$router.push({
-                path: '/'
-              })
+             console.log('로그인 성공');
             })
-            .catch(() => {
+            .catch((err) => {
               alert('로그인 실패')
             })        
-        } 
+        }
       } 
     },
     middleware: 'anonymous',

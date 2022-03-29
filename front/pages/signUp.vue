@@ -94,10 +94,8 @@
             role: this.role,
           })
           .then(() => {
-              this.$router.push({
-                path: '/'
-              })
-            })
+            console.log('회원가입 성공');
+          })
           .catch(() => {
             alert('회원가입 실패')
           })  

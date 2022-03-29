@@ -36,36 +36,44 @@ export const mutations = {
 export const actions = {
   // signUp(context, payload) {
   signUp({ commit }, payload) {
-    this.$axios.post('http://localhost:8080/users/signup', {
+    this.$axios.post('/users/signup', {
       name: payload.name,
       userId: payload.userId,
       password: payload.password,
       department: payload.department,
       role: payload.role
     }).then((res) => {
-      console.log(res)
       commit("setMe", res);
+      alert('회원가입 성공')
+      this.$router.push({
+        path: '/'
+      })
     }).catch((err) => {
+      alert('아이디가 중복됩니다.')
       console.error(err)
     })
   },
 
   login({ commit }, payload) {
-    this.$axios.post('http://localhost:8080/users/login',{
+    this.$axios.post('/users/login',{
       userId: payload.userId,
       password: payload.password
     }).then((res) => {
-      console.log(res) // department, name, userId, role
+      alert('로그인 성공')
       commit('setMe', res)
+      this.$router.push({
+        path: '/'
+      })
     }).catch((err) => {
+      alert('아이디 또는 비밀번호가 틀립니다')
       console.error(err)
     })
   },
 
   logOut({ commit }, payload) {
-    this.$axios.post('http://localhost:8080/users/logout')
+    this.$axios.post('/users/logout')
       .then(() => {
-        console.log('로그아웃 성공')
+        alert('로그아웃 성공')
         commit("setMe", null);
         this.$router.push({
           path: '/'
@@ -78,7 +86,7 @@ export const actions = {
 
   loadUsers({ commit, state }) {
     if (state.hasMoreUser) {
-      this.$axios.get("http://localhost:8080/users")
+      this.$axios.get("/users")
       .then((res) => {
         commit("loadUsers", res.data.data.exUser);
       })

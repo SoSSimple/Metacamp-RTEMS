@@ -1,13 +1,20 @@
 module.exports = {
-	head: {
-		title: '공통'
-	},
-	modules: [
-		'@nuxtjs/vuetify',
-		'@nuxtjs/axios'
-	],
-	plugins: [],
-	vuetify: {
-
-	},
-}
+  head: {
+    title: 'MetaCamp',
+  },
+  modules: [
+    '@nuxtjs/axios',
+  ],
+  buildModules: [
+    '@nuxtjs/vuetify',
+  ],
+  vuetify: {},
+  axios: {
+    browserBaseURL: 'http://localhost:8080',
+    baseURL: 'http://localhost:8080',
+    https: false,
+  },
+  server: {
+    port: 3000,
+  },
+};
