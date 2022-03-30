@@ -5,14 +5,23 @@ const User = require("./users.js");
 const Device = require("./devices.js");
 const Result = require("./results.js");
 const Pause = require("./pause.js");
+const dotenv = require("dotenv");
 
-const db = {};
-const sequelize = new Sequelize(
-  config.database,
-  config.username,
-  config.password,
-  config
-);
+dotenv.config();
+
+const db = {
+  username: process.env.DB_ID,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  dialect: process.env.DB_DIALECT,
+};
+const sequelize = new Sequelize(db.database, db.username, db.password, {
+  host: db.host,
+  port: db.port,
+  dialect: db.dialect,
+});
 
 db.sequelize = sequelize;
 

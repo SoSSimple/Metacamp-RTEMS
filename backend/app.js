@@ -52,6 +52,7 @@ const influx = new Influx.InfluxDB({
 influx
   .getDatabaseNames()
   .then((names) => {
+    console.log("influx database connection success");
     if (!names.includes("database_rtems")) {
       return influx.createDatabase("database_rtems");
     }
