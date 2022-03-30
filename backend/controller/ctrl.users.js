@@ -102,6 +102,7 @@ const removeUser = async (req, res, next) => {
 };
 
 const editUser = async (req, res, next) => {
+  // TODO: params로 받아오는 값을 body로 수정해서 id와 password가 일치하는지 비교한 후 맞으면 수정, 아니면 에러 처리
   const { userId, name, password, role } = req.body;
   const paramId = req.params;
   console.log(paramId);
@@ -139,26 +140,49 @@ const loginUser = async (req, res, next) => {
         .status(401)
         .json({ data: { success: false, msg: info.message } });
     }
-    return req.login(user, (loginError) => {
-      if (loginError) {
-        return next(loginError);
-      }
-      let token = "";
-      token = jwt.sign(
-        {
-          userId: user.userId,
-          password: user.password,
-        },
-        "secretkey",
-        {
-          expiresIn: "10m",
+
+    // session 등록
+    req.session.user = {
+      userId: user.userId,
+      name: user.name,
+      department: user.department,
+      role: user.role,
+    };
+    console.log(req.session.user);
+    if (req.session.user) {
+      return req.login(user, (loginError) => {
+        const { userId, name, role, department } = user;
+        if (loginError) {
+          return next(loginError);
         }
-      );
-      res.setHeader("token", token);
-      return res
-        .status(201)
-        .json({ data: { success: true, msg: "로그인 성공", token } });
-    });
+        let token = "";
+        token = jwt.sign(
+          {
+            userId: user.userId,
+            password: user.password,
+          },
+          "secretkey",
+          {
+            expiresIn: "10m",
+          }
+        );
+        res.setHeader("token", token);
+        return res.status(201).json({
+          data: {
+            success: true,
+            msg: "로그인 성공",
+            userId,
+            name,
+            role,
+            department,
+            token,
+          },
+        });
+      });
+    } else {
+      console.log("session 등록 실패");
+      res.send("session 등록 실패");
+    }
   })(req, res, next);
 };
 
