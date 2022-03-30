@@ -104,8 +104,8 @@ const removeUser = async (req, res, next) => {
 const editUser = async (req, res, next) => {
   // TODO: params로 받아오는 값을 body로 수정해서 id와 password가 일치하는지 비교한 후 맞으면 수정, 아니면 에러 처리
   const { userId, name, password, role } = req.body;
-  const paramId = req.params;
-  console.log(paramId);
+  const paramUserId = req.params.id;
+  console.log(paramUserId);
   try {
     const hash = await bcrypt.hash(password, 12);
     await User.update(
@@ -115,7 +115,7 @@ const editUser = async (req, res, next) => {
         password: hash,
         role,
       },
-      { where: paramId }
+      { where: { userId: paramUserId } }
     );
     res.status(201).json({
       data: {
