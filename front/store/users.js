@@ -1,3 +1,5 @@
+import throttle from 'lodash/throttle'
+
 export const state = () => ({
   me: null,
   mainUsers: [],
@@ -8,25 +10,17 @@ export const state = () => ({
 // mutations은 비동기 작업이 존재하면 안된다
 // settimeout promise ajax axios 기타 등등
 
-const totalUsers = 51;
-const limit = 10;
-
 export const mutations = {
   setMe(state, payload) {
     state.me = payload;
   },
   loadUsers(state, payload) {
-    // const diff = totalUsers - state.mainUsers.length; // 아직 안 불러온 게시글 수
-    // const fakeUsers = Array(diff > limit ? limit : diff)
-    //   .fill()
-    //   .map((v) => ({
-    //     no: 1,
-    //     userId: "name123",
-    //     role: "사원",
-    //     department: "개발부",
-    //   }));
-    state.mainUsers = state.mainUsers.concat(payload);
-    state.hasMorePost = payload.length === limit;
+    if (payload.reset) {
+      state.mainUsers = payload.data;
+    } else {
+      state.mainUsers = state.mainUsers.concat(payload.data);
+    }
+    state.hasMorePost = payload.data.length === 10;
   },
 };
 
@@ -83,16 +77,26 @@ export const actions = {
         console.error(err)
       })
   },
-
-  loadUsers({ commit, state }) {
-    if (state.hasMoreUser) {
-      this.$axios.get("/users")
-      .then((res) => {
-        commit("loadUsers", res.data.data.exUser);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  loadUsers: throttle(async function({ commit, state }, payload) {
+    try {
+      if (payload && payload.reset) {
+        const res = await this.$axios.get("/users?limit=10");
+        commit('loadUsers', {
+          data: res.data.data.exUser, 
+          reset: true
+        });
+        return;
+      }
+      // if (state.hasMorePost) {
+      //   const lastPost = state.mainPosts[state.mainPosts.length - 1];
+      //   const res = await this.$axios.get(`/posts?lastId=${lastPost && lastPost.id}&limit=10`);
+      //   commit('loadUsers', {
+      //     data: res.data,
+      //   });
+      //   return;
+      // }
+    } catch (err) {
+      console.error(err);
     }
-  },
+  }, 2000),
 };

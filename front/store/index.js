@@ -1,4 +1,3 @@
-
 // state 는 함수
 export const state = () => ({
   hello: 'vuex',

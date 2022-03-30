@@ -2,6 +2,7 @@ npm init
 npm i vue nuxt
 npm i vuetify @nuxtjs/vuetify
 npm i -D eslint eslint-plugin-vue
+npm install lodash --save
 
 "dependencies": {
     "@nuxtjs/axios": "^5.13.6",

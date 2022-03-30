@@ -20,7 +20,7 @@
     >
       <template #item="row">
         <tr>
-          <td>{{ row.item.no }}</td>
+          <td>{{ row.item.name }}</td>
           <td>{{ row.item.userId }}</td>
           <td>{{ row.item.role }}</td>
           <td>{{ row.item.department }}</td>
@@ -40,6 +40,8 @@
   </v-card>
 </template>
 <script>
+import cookie from 'cookie'
+
 export default {
   data() {
     return {
@@ -54,9 +56,8 @@ export default {
     };
   },
   fetch({ store }) {
-    store.dispatch("users/loadUsers");
+    store.dispatch("users/loadUsers", { reset: true });
   },
-  
   computed: {
     mainUsers() {
       return this.$store.state.users.mainUsers;
