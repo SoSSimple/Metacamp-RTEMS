@@ -1,20 +1,25 @@
+/* eslint-disable no-unused-vars */
 import axios from "axios";
 
 export default {
   state: {
     me: null,
-    DepartmentList: [],
+    UserList: [],
   },
   getters: {
     me: (state) => state.me,
+    UserList: (state) => state.UserList,
   },
   mutations: {
     setMe(state, data) {
       state.me = data;
     },
+    setUserList(state, data) {
+      state.UserList = data;
+    },
   },
   actions: {
-    async actUser(context, payload) {
+    async actUserLogin(context, payload) {
       await axios
         .post("http://localhost:8080/users/login", {
           userId: payload.userId,
@@ -32,6 +37,17 @@ export default {
         .catch((err) => {
           console.log(err);
           alert("로그인 실패");
+        });
+    },
+
+    async actUserList(context) {
+      await axios
+        .get("http://localhost:8080/users/")
+        .then((res) => {
+          context.commit("setUserList", res.data.data.exUser);
+        })
+        .catch((err) => {
+          console.error(err);
         });
     },
   },

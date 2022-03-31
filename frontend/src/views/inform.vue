@@ -71,7 +71,6 @@ export default {
       } else if (this.inputMode === "update") {
         title = "부서정보 수정";
       }
-
       return title;
     },
     getCreatedAt() {

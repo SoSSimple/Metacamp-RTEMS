@@ -8,10 +8,7 @@
         <b-col>
           <b-row style="margin-right: 8px">
             <b-col style="text-align: left; margin-bottom: 10px"
-              ><b-button
-                variant="primary"
-                size="sm"
-                @click="searchDepartmentList"
+              ><b-button variant="primary" size="sm" @click="searchUserList"
                 >검색</b-button
               ></b-col
             >
@@ -24,7 +21,7 @@
               small
               hover
               striped
-              :items="departmentList"
+              :items="userList"
               :fields="fields"
             ></b-table>
           </div>
@@ -46,10 +43,24 @@ export default {
       fields: [
         { key: "userId", label: "아이디" },
         { key: "name", label: "이름" },
-        { key: "deviceLog", label: "작업이력" },
-        { key: "createdAt", label: "생성일" },
+        { key: "email", label: "이메일" },
+        { key: "role", label: "권한" },
+        { key: "department", label: "부서" },
       ],
     };
+  },
+  computed: {
+    userList() {
+      return this.$store.getters.UserList;
+    },
+  },
+  created() {
+    this.searchUserList();
+  },
+  methods: {
+    searchUserList() {
+      this.$store.dispatch("actUserList");
+    },
   },
 };
 </script>
