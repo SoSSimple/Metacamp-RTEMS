@@ -1,9 +1,28 @@
 <template>
-  <div class="home">
-    <h1>This is Index page</h1>
+  <div>
+    <b-container fluid style="padding-left: 0px">
+      <b-row>
+        <b-col
+          cols="2"
+          style="padding-right: 0px; margin-left: 8px; margin-right: 8px"
+        >
+          <app-sidebar />
+        </b-col>
+        <b-col style="padding-left: 0px; padding-right: 0px">
+          <div class="content-body">
+            <router-view />
+          </div>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
-
 <script>
-export default {};
+import Sidebar from "../components/layout/Sidebar.vue";
+
+export default {
+  components: {
+    "app-sidebar": Sidebar,
+  },
+};
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <hr />
-    <span>This is Footer</span>
+    <span></span>
   </div>
 </template>
 

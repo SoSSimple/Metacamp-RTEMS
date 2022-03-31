@@ -9,6 +9,7 @@
 <script>
 import Header from "./components/layout/Header.vue";
 import Footer from "./components/layout/Footer.vue";
+
 export default {
   components: {
     "app-header": Header,
@@ -16,3 +17,5 @@ export default {
   },
 };
 </script>
+
+<style src="./assets/style/main.css"></style>

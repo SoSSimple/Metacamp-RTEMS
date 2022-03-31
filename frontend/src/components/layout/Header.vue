@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="background-color: blue">
     <h1>This is Header</h1>
     <hr />
   </div>
@@ -8,5 +8,3 @@
 <script>
 export default {};
 </script>
-
-<style lang="scss" scoped></style>
