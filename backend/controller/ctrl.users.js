@@ -3,11 +3,11 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
-const userSession = (req, res, next) => {
-  console.log("user session 등록", req.user);
-  res.locals.user = req.user;
-  next();
-};
+// const userSession = (req, res, next) => {
+//   console.log("user session 등록", req.user);
+//   res.locals.user = req.user;
+//   next();
+// };
 
 const getUsers = async (req, res, next) => {
   try {
@@ -199,7 +199,7 @@ const logoutUser = (req, res) => {
 };
 
 module.exports = {
-  userSession,
+  // userSession,
   getUsers,
   getUserLog,
   signUser,

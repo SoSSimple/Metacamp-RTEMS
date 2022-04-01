@@ -6,6 +6,7 @@ const Pause = require("../models/pause.js");
 const getDevices = async (req, res, next) => {
   try {
     const devices = await Device.findAll({});
+
     return res.status(200).json({
       data: {
         success: true,
@@ -19,9 +20,11 @@ const getDevices = async (req, res, next) => {
 };
 
 const getDevice = async (req, res, next) => {
-  const paramId = req.params.id;
+  const deviceName = req.params.deviceName;
   try {
-    const exDevice = await Device.findOne({ where: { id: paramId } });
+    const exDevice = await Device.findOne({
+      where: { deviceName: deviceName },
+    });
     if (exDevice) {
       return res.status(200).json({
         data: {
@@ -45,11 +48,16 @@ const getDevice = async (req, res, next) => {
 
 const getDeviceLog = async (req, res, next) => {
   try {
-    const device = await Device.findOne({ where: req.body.deviceId });
+    const deviceName = req.params.id;
+    // console.log(deviceName);
+    const device = await Device.findOne({
+      where: { deviceName },
+    });
+
+    console.log("getDeviceLog", device);
+
     if (device) {
-      const resultDeviceLogs = await device.getDeviceLogs({
-        where: req.body.userId,
-      });
+      const resultDeviceLogs = await device.getDeviceLogs({});
       res.status(201).json({ resultDeviceLogs });
     } else {
       res.status(404).send("no device");
@@ -83,11 +91,14 @@ const createDevice = async (req, res, next) => {
 };
 
 const readyDevice = async (req, res, next) => {
-  const { readyState, deviceId } = req.body;
-  const opState = await Device.findOne({ where: { id: deviceId } });
+  const { readyState, deviceName } = req.body;
+  const opState = await Device.findOne({ where: { deviceName: deviceName } });
   try {
     if (opState.operatingState == 0) {
-      await Device.update({ readyState }, { where: { id: deviceId } });
+      await Device.update(
+        { readyState },
+        { where: { deviceName: deviceName } }
+      );
       const message = `${!readyState}에서 ${readyState}로 바뀝니다.`;
       return res.status(201).json({
         data: {

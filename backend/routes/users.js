@@ -13,7 +13,7 @@ const validte = (req, res, next) => {
   return res.status(400).json({ msg: errors.array()[0].msg });
 };
 
-router.use(ctrlUsers.userSession);
+// router.use(ctrlUsers.userSession);
 
 // GET /users 회원 조회
 router.get("/", ctrlUsers.getUsers);
