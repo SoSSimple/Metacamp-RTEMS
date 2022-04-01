@@ -77,7 +77,7 @@ export default {
         userId: this.form.id,
         password: this.form.password,
       };
-      this.$store.dispatch("actUser", payload);
+      this.$store.dispatch("actUserLogin", payload);
       if (this.me !== null) {
         alert("로그인 성공");
         this.valid = true;
