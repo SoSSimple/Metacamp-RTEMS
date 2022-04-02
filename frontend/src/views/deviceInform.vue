@@ -1,6 +1,7 @@
 <template>
   <div>
     <b-modal id="modal-device-inform" title="준비상태 바꾸기" @ok="onSubmit">
+      <template #modal-title> 운영상태 바꾸기</template>
       <p>장비명과 준비상태를 선택하시오.</p>
       <b-form-group>
         <b-form-select v-model="selectedDevice">

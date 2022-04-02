@@ -77,7 +77,17 @@ export default {
         });
     },
     async actDeviceOperating(context, payload) {
-      console.log(payload); // deviceName만 받아오면 됨
+      console.log("actions", payload);
+      await axios
+        .patch("http://localhost:8080/devices/operating", {
+          operatingState: payload.operatingState,
+          deviceName: payload.deviceName,
+          userId: payload.userId,
+        })
+        .then((res) => {
+          console.log(res.data.data);
+          // context.commit()
+        });
     },
   },
 };
