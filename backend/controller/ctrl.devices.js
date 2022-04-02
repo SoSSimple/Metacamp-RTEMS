@@ -122,24 +122,27 @@ const readyDevice = async (req, res, next) => {
 
 // 비가동에서 가동중인 상태로 바꿔야할 때
 const operatingDevice = async (req, res, next) => {
-  const { operatingState, deviceId, userId } = req.body;
-  const opState = await Device.findOne({ where: { id: deviceId } });
+  const { operatingState, deviceName, userId } = req.body;
+  const opState = await Device.findOne({ where: { deviceName } });
+  const deviceId = opState.dataValues.id;
+  console.log("------------------------", deviceId);
   try {
     if (opState.readyState == 1) {
-      if (operatingState === 1) {
+      if (operatingState == 1) {
         if (opState.operatingState == operatingState) {
           return res.status(409).json({
             data: { success: false, msg: "현재 이미 가동중인 상태입니다." },
           });
         }
-        const user = await User.findOne({ where: userId });
+        console.log("---------------------here 1");
+        const user = await User.findOne({ where: { userId } });
         if (user) {
           await user.addDeviceUserLogs(parseInt(deviceId, 10));
           await Device.update(
             { operatingState, startedAt: Date.now() },
             { where: { id: deviceId } }
           );
-
+          console.log("---------------------here 2");
           return res.status(201).json({
             data: {
               success: true,
