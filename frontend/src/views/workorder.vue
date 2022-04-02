@@ -12,15 +12,36 @@
               <template #cell(updatedBtn)="row">
                 <b-button
                   size="sm"
-                  variant="success"
+                  variant="outline-primary"
                   @click="onClickEdit(row.item.id)"
                   >수정</b-button
+                >
+              </template>
+              <template #cell(completedBtn)="row">
+                <b-button
+                  size="sm"
+                  variant="success"
+                  @click="onClickComplete(row.item.id)"
+                  >완료</b-button
+                >
+              </template>
+              <template #cell(pausedBtn)="row">
+                <b-button size="sm" @click="onClickPause(row.item.id)"
+                  >정지</b-button
+                >
+              </template>
+              <template #cell(emergencyBtn)="row">
+                <b-button
+                  size="sm"
+                  variant="danger"
+                  @click="onClickEmergency(row.item.id)"
+                  >긴급정지</b-button
                 >
               </template>
             </b-table>
           </div>
           <br />
-          <div>
+          <div style="margin-right: 22px">
             <hr />
             <h2>장비 사용 기록</h2>
             <br />
@@ -35,7 +56,7 @@
               >
               </b-table>
             </div>
-            <div>
+            <div style="margin-right: 22px">
               <h4>Edge-2 기록</h4>
               <b-table
                 small
@@ -46,7 +67,7 @@
               >
               </b-table>
             </div>
-            <div>
+            <div style="margin-right: 22px">
               <h4>Edge-3 기록</h4>
               <b-table
                 small
@@ -82,6 +103,9 @@ export default {
         { key: "operatingState", label: "가동 상태" },
         { key: "startedAt", label: "가동 시작 시간" },
         { key: "updatedBtn", label: "가동 수정" },
+        { key: "completedBtn", label: "완료" },
+        { key: "pausedBtn", label: "비상정지" },
+        { key: "emergencyBtn", label: "긴급정지" },
       ],
       edgeFields: [
         { key: "name", label: "작업자 이름" },
@@ -125,7 +149,19 @@ export default {
       this.$store.dispatch("actEdgeThreeLogs");
     },
     onClickEdit() {
+      this.$store.dispatch("actDeviceInputMode", "update");
       this.$bvModal.show("modal-order-inform");
+    },
+    onClickComplete() {
+      this.$store.dispatch("actDeviceInputMode", "complete");
+      this.$bvModal.show("modal-order-inform");
+    },
+    onClickPause() {
+      this.$store.dispatch("actDeviceInputMode", "pause");
+      this.$bvModal.show("modal-order-inform");
+    },
+    onClickEmergency() {
+      console.log("emergency");
     },
   },
 };

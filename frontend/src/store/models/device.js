@@ -8,6 +8,7 @@ export default {
     EdgeOneLogs: [],
     EdgeTwoLogs: [],
     EdgeThreeLogs: [],
+    InputMode: null,
   },
   getters: {
     Device: (state) => state.Device,
@@ -15,6 +16,7 @@ export default {
     EdgeOneLogs: (state) => state.EdgeOneLogs,
     EdgeTwoLogs: (state) => state.EdgeTwoLogs,
     EdgeThreeLogs: (state) => state.EdgeThreeLogs,
+    DeviceInputMode: (state) => state.InputMode,
   },
   mutations: {
     setDeviceList(state, data) {
@@ -28,6 +30,9 @@ export default {
     },
     setEdgeThreeLogs(state, data) {
       state.EdgeThreeLogs = data;
+    },
+    setInputMode(state, data) {
+      state.InputMode = data;
     },
   },
 
@@ -54,7 +59,6 @@ export default {
       await axios
         .get(`http://localhost:8080/devices/log/${deviceName}`)
         .then((res) => {
-          console.log(res.data.resultDeviceLogs);
           context.commit("setEdgeOneLogs", res.data.resultDeviceLogs);
         });
     },
@@ -63,7 +67,6 @@ export default {
       await axios
         .get(`http://localhost:8080/devices/log/${deviceName}`)
         .then((res) => {
-          console.log(res.data.resultDeviceLogs);
           context.commit("setEdgeTwoLogs", res.data.resultDeviceLogs);
         });
     },
@@ -72,22 +75,20 @@ export default {
       await axios
         .get(`http://localhost:8080/devices/log/${deviceName}`)
         .then((res) => {
-          console.log(res.data.resultDeviceLogs);
           context.commit("setEdgeThreeLogs", res.data.resultDeviceLogs);
         });
     },
     async actDeviceOperating(context, payload) {
       console.log("actions", payload);
-      await axios
-        .patch("http://localhost:8080/devices/operating", {
-          operatingState: payload.operatingState,
-          deviceName: payload.deviceName,
-          userId: payload.userId,
-        })
-        .then((res) => {
-          console.log(res.data.data);
-          // context.commit()
-        });
+      await axios.patch("http://localhost:8080/devices/operating", {
+        operatingState: payload.operatingState,
+        deviceName: payload.deviceName,
+        userId: payload.userId,
+      });
+    },
+
+    async actDeviceInputMode(context, payload) {
+      context.commit("setInputMode", payload);
     },
   },
 };
