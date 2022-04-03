@@ -52,7 +52,7 @@ const getUserLog = async (req, res, next) => {
 
 const signUser = async (req, res, next) => {
   try {
-    const { name, userId, password, department } = req.body;
+    const { name, userId, password, department, role } = req.body;
     const exUser = await User.findOne({ where: { userId } });
     if (!exUser) {
       // 중복된 아이디가 없다면
@@ -62,6 +62,7 @@ const signUser = async (req, res, next) => {
         userId,
         password: hash,
         department,
+        role,
       });
       return res.status(201).json({
         data: {
