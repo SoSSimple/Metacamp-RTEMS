@@ -6,6 +6,7 @@ export default {
     Device: null,
     DeviceList: [],
     DeviceResultList: [],
+    DevicePauseList: [],
     EdgeOneLogs: [],
     EdgeTwoLogs: [],
     EdgeThreeLogs: [],
@@ -15,6 +16,7 @@ export default {
     Device: (state) => state.Device,
     DeviceList: (state) => state.DeviceList,
     DeviceResultList: (state) => state.DeviceResultList,
+    DevicePauseList: (state) => state.DevicePauseList,
     EdgeOneLogs: (state) => state.EdgeOneLogs,
     EdgeTwoLogs: (state) => state.EdgeTwoLogs,
     EdgeThreeLogs: (state) => state.EdgeThreeLogs,
@@ -26,6 +28,9 @@ export default {
     },
     setDeviceResultList(state, data) {
       state.DeviceResultList = data;
+    },
+    setDevicePauseList(state, data) {
+      state.DevicePauseList = data;
     },
     setEdgeOneLogs(state, data) {
       state.EdgeOneLogs = data;
@@ -113,6 +118,15 @@ export default {
         // console.log(res.data.data.deviceResults);
         context.commit("setDeviceResultList", res.data.data.deviceResults);
       });
+    },
+
+    async actDevicePausedList(context) {
+      await axios
+        .get("http://localhost:8080/devices/pause/list")
+        .then((res) => {
+          // console.log(res.data.data);
+          context.commit("setDevicePauseList", res.data.data.pauseList);
+        });
     },
 
     async actDeviceInputMode(context, payload) {
