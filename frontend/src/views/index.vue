@@ -67,6 +67,7 @@ export default {
         id: "",
         password: "",
       },
+      user: "",
     };
   },
   computed: {
@@ -74,7 +75,17 @@ export default {
       return this.$store.getters.me;
     },
   },
+  created() {
+    this.searchUserSession();
+  },
   methods: {
+    searchUserSession() {
+      if (sessionStorage.length > 0) {
+        this.valid = true;
+      } else {
+        this.valid = false;
+      }
+    },
     onSubmit(event) {
       event.preventDefault();
       const payload = {
@@ -84,7 +95,10 @@ export default {
       this.$store.dispatch("actUserLogin", payload);
       if (this.me !== null) {
         alert("로그인 성공");
-        this.valid = true;
+        sessionStorage.setItem("userId", this.me.userId);
+        sessionStorage.setItem("name", this.me.name);
+        sessionStorage.setItem("role", this.me.role);
+        this.$router.go();
       }
     },
     onSubmitSignup() {
