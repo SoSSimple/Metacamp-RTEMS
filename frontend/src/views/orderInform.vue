@@ -31,14 +31,25 @@
               </option>
             </b-form-select>
           </b-form-group>
-          <b-form-group v-slot="{ ariaDescribedby }">
-            <b-form-radio-group
-              id="radio-group-1"
-              v-model="selectedOperating"
-              :options="options"
-              :aria-describedby="ariaDescribedby"
-              name="radio-options"
-            ></b-form-radio-group>
+          <b-form-group>
+            <b-form-input
+              style="margin: 5px"
+              v-model="total"
+              placeholder="공정 개수"
+            ></b-form-input>
+            <b-form-input
+              style="margin: 5px"
+              v-model="failedCount"
+              placeholder="실패 개수"
+            ></b-form-input>
+            <b-form-textarea
+              style="margin: 5px"
+              id="textarea"
+              v-model="description"
+              placeholder="비고 적기"
+              rows="3"
+              max-rows="6"
+            ></b-form-textarea>
           </b-form-group>
         </div>
 
@@ -77,6 +88,9 @@ export default {
       ],
       selectedOperating: false,
       selectedDevice: false,
+      total: null,
+      failedCount: null,
+      description: null,
     };
   },
   computed: {
@@ -132,23 +146,15 @@ export default {
 
       // 2. 가동 완료인 경우
       if (this.inputMode === "complete") {
-        if (this.selectedOperating == "on") {
-          this.returnSelected = true;
-          const payload = {
-            operatingState: this.returnSelected,
-            deviceName: this.selectedDevice,
-            userId: this.me.userId,
-          };
-          this.$store.dispatch("actDeviceOperating", payload);
-        } else {
-          this.returnSelected = false;
-          const payload = {
-            operatingState: this.returnSelected,
-            deviceName: this.selectedDevice,
-            userId: this.me.userId,
-          };
-          this.$store.dispatch("actDeviceOperating", payload);
-        }
+        const payload = {
+          deviceName: this.selectedDevice,
+          userId: this.me.userId,
+          total: this.total,
+          failedCount: this.failedCount,
+          description: this.description,
+        };
+        console.log(payload);
+        this.$store.dispatch("actDeviceComplete", payload);
       }
 
       // 3. 비상정지인 경우

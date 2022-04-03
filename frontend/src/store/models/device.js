@@ -81,9 +81,18 @@ export default {
     async actDeviceOperating(context, payload) {
       console.log("actions", payload);
       await axios.patch("http://localhost:8080/devices/operating", {
-        operatingState: payload.operatingState,
         deviceName: payload.deviceName,
         userId: payload.userId,
+      });
+    },
+
+    async actDeviceComplete(context, payload) {
+      console.log("actions", payload);
+      await axios.post("http://localhost:8080/devices/completed", {
+        deviceName: payload.deviceName,
+        userId: payload.userId,
+        total: payload.total,
+        failedCount: payload.failedCount,
       });
     },
 
