@@ -15,6 +15,9 @@ router.get("/log/:id", ctrlDevices.getDeviceLog);
 // GET /devices/results
 router.get("/results", ctrlDevices.results);
 
+// GET /devices/pause/list
+router.get("/pause/list", ctrlDevices.pauseList);
+
 // POST /devices/create 장비 만들기
 router.post("/create", ctrlDevices.createDevice);
 

@@ -306,6 +306,21 @@ const results = async (req, res, next) => {
   }
 };
 
+const pauseList = async (req, res, next) => {
+  try {
+    const pauseList = await Pause.findAll({});
+    return res.status(200).json({
+      data: {
+        success: true,
+        pauseList,
+      },
+    });
+  } catch (error) {
+    console.error(`getDevices error: ${error}`);
+    return next(error);
+  }
+};
+
 module.exports = {
   getDevices,
   getDevice,
@@ -316,4 +331,5 @@ module.exports = {
   completed,
   paused,
   results,
+  pauseList,
 };
