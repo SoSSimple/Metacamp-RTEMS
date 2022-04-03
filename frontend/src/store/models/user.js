@@ -40,6 +40,16 @@ export default {
         });
     },
 
+    async actSignup(context, payload) {
+      await axios.post("http://localhost:8080/users/signup", {
+        userId: payload.userId,
+        password: payload.password,
+        name: payload.name,
+        role: payload.role,
+        department: payload.department,
+      });
+    },
+
     async actUserList(context) {
       await axios
         .get("http://localhost:8080/users/")
