@@ -150,7 +150,7 @@ const loginUser = async (req, res, next) => {
       department: user.department,
       role: user.role,
     };
-    console.log(req.session.user);
+
     if (req.session.user) {
       return req.login(user, (loginError) => {
         const { userId, name, role, department } = user;
