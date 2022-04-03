@@ -5,6 +5,7 @@ export default {
   state: {
     Device: null,
     DeviceList: [],
+    DeviceResultList: [],
     EdgeOneLogs: [],
     EdgeTwoLogs: [],
     EdgeThreeLogs: [],
@@ -13,6 +14,7 @@ export default {
   getters: {
     Device: (state) => state.Device,
     DeviceList: (state) => state.DeviceList,
+    DeviceResultList: (state) => state.DeviceResultList,
     EdgeOneLogs: (state) => state.EdgeOneLogs,
     EdgeTwoLogs: (state) => state.EdgeTwoLogs,
     EdgeThreeLogs: (state) => state.EdgeThreeLogs,
@@ -21,6 +23,9 @@ export default {
   mutations: {
     setDeviceList(state, data) {
       state.DeviceList = data;
+    },
+    setDeviceResultList(state, data) {
+      state.DeviceResultList = data;
     },
     setEdgeOneLogs(state, data) {
       state.EdgeOneLogs = data;
@@ -81,6 +86,7 @@ export default {
     async actDeviceOperating(context, payload) {
       console.log("actions", payload);
       await axios.patch("http://localhost:8080/devices/operating", {
+        operatingState: payload.operatingState,
         deviceName: payload.deviceName,
         userId: payload.userId,
       });
@@ -93,6 +99,19 @@ export default {
         userId: payload.userId,
         total: payload.total,
         failedCount: payload.failedCount,
+      });
+    },
+
+    async actDevicePause(context, payload) {
+      await axios.post("http://localhost:8080/devices/pause", {
+        deviceName: payload.deviceName,
+      });
+    },
+
+    async actDeviceResult(context) {
+      await axios.get("http://localhost:8080/devices/results").then((res) => {
+        // console.log(res.data.data.deviceResults);
+        context.commit("setDeviceResultList", res.data.data.deviceResults);
       });
     },
 

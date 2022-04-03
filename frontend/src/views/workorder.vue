@@ -26,16 +26,11 @@
                 >
               </template>
               <template #cell(pausedBtn)="row">
-                <b-button size="sm" @click="onClickPause(row.item.id)"
-                  >정지</b-button
-                >
-              </template>
-              <template #cell(emergencyBtn)="row">
                 <b-button
                   size="sm"
                   variant="danger"
-                  @click="onClickEmergency(row.item.id)"
-                  >긴급정지</b-button
+                  @click="onClickPause(row.item.id)"
+                  >정지</b-button
                 >
               </template>
             </b-table>
@@ -105,7 +100,6 @@ export default {
         { key: "updatedBtn", label: "가동 수정" },
         { key: "completedBtn", label: "완료" },
         { key: "pausedBtn", label: "비상정지" },
-        { key: "emergencyBtn", label: "긴급정지" },
       ],
       edgeFields: [
         { key: "name", label: "작업자 이름" },
@@ -159,9 +153,6 @@ export default {
     onClickPause() {
       this.$store.dispatch("actDeviceInputMode", "pause");
       this.$bvModal.show("modal-order-inform");
-    },
-    onClickEmergency() {
-      console.log("emergency");
     },
   },
 };

@@ -158,25 +158,12 @@ export default {
       }
 
       // 3. 비상정지인 경우
-      // if (this.inputMode === "pause") {
-      //   if (this.selectedOperating == "on") {
-      //     this.returnSelected = true;
-      //     const payload = {
-      //       operatingState: this.returnSelected,
-      //       deviceName: this.selectedDevice,
-      //       userId: this.me.userId,
-      //     };
-      //     this.$store.dispatch("actDeviceOperating", payload);
-      //   } else {
-      //     this.returnSelected = false;
-      //     const payload = {
-      //       operatingState: this.returnSelected,
-      //       deviceName: this.selectedDevice,
-      //       userId: this.me.userId,
-      //     };
-      //     this.$store.dispatch("actDeviceOperating", payload);
-      //   }
-      // }
+      if (this.inputMode === "pause") {
+        const payload = {
+          deviceName: this.selectedDevice,
+        };
+        this.$store.dispatch("actDevicePause", payload);
+      }
     },
   },
 };
