@@ -44,17 +44,21 @@
         <b-button type="submit" variant="primary" style="margin: 5px"
           >Submit</b-button
         >
+        <b-button @click="onSubmitSignup">signup</b-button>
       </b-form>
     </div>
+    <inform />
   </b-container>
 </template>
 
 <script>
 import Sidebar from "../components/layout/Sidebar.vue";
+import SignupInform from "./signupInform.vue";
 
 export default {
   components: {
     "app-sidebar": Sidebar,
+    inform: SignupInform,
   },
   data() {
     return {
@@ -82,6 +86,9 @@ export default {
         alert("로그인 성공");
         this.valid = true;
       }
+    },
+    onSubmitSignup() {
+      this.$bvModal.show("modal-signup-inform");
     },
   },
 };
