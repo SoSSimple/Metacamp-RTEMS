@@ -1,6 +1,6 @@
 <template>
   <b-list-group>
-    <b-list-group-item href="#" @click="$router.push('/dashboard')"
+    <b-list-group-item href="#" @click="$router.push('/webgl')"
       >디지털트윈</b-list-group-item
     >
     <b-list-group-item href="#" @click="$router.push('/dashboard')"

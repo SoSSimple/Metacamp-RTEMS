@@ -98,7 +98,7 @@ export default {
         sessionStorage.setItem("userId", this.me.userId);
         sessionStorage.setItem("name", this.me.name);
         sessionStorage.setItem("role", this.me.role);
-        this.$router.go();
+        this.$router.push("/webgl");
       }
     },
     onSubmitSignup() {
