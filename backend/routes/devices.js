@@ -12,6 +12,9 @@ router.get("/:id/device", ctrlDevices.getDevice);
 // GET /devices/log 사용된 장비의 이력 가져오기
 router.get("/log/:id", ctrlDevices.getDeviceLog);
 
+// GET /devices/results
+router.get("/results", ctrlDevices.results);
+
 // POST /devices/create 장비 만들기
 router.post("/create", ctrlDevices.createDevice);
 

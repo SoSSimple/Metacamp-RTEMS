@@ -187,9 +187,13 @@ const operatingDevice = async (req, res, next) => {
 };
 
 const completed = async (req, res, next) => {
-  const { userId, deviceId, total, failedCount } = req.body;
+  // const { userId, deviceId, total, failedCount } = req.body;
+  const { userId, deviceName, total, failedCount } = req.body;
   const bool = false;
-  const device = await Device.findOne({ where: deviceId });
+  // const device = await Device.findOne({ where: deviceId });
+  const device = await Device.findOne({ where: { deviceName } });
+  const deviceId = device.dataValues.id;
+
   try {
     if (!device) {
       return res.status(409).json({
@@ -202,10 +206,16 @@ const completed = async (req, res, next) => {
     console.log("here1");
     const yield = (total - failedCount) / total;
     const date = await Device.findOne(
-      { where: deviceId },
+      // { where: deviceId },
+      { where: { deviceName } },
       { attributes: ["startedAt"] }
     );
-    await Device.update({ operatingState: bool }, { where: { id: deviceId } });
+    // await Device.update({ operatingState: bool }, { where: { id: deviceId } });
+    await Device.update(
+      { operatingState: bool },
+      // { where: { id: deviceId } }
+      { where: { deviceName } }
+    );
     await Result.create({
       userId,
       deviceId,
@@ -228,8 +238,10 @@ const completed = async (req, res, next) => {
 };
 
 const paused = async (req, res, next) => {
-  const { deviceId } = req.body;
-  const exDevice = await Device.findOne({ where: { id: deviceId } });
+  // const { deviceId } = req.body;
+  const { deviceName } = req.body;
+  // const exDevice = await Device.findOne({ where: { id: deviceId } });
+  const exDevice = await Device.findOne({ where: { deviceName: deviceName } });
   try {
     if (!exDevice) {
       return res.status(400).json({
@@ -239,6 +251,7 @@ const paused = async (req, res, next) => {
         },
       });
     }
+    const deviceId = exDevice.dataValues.id;
 
     if (exDevice["operatingState"] == false) {
       return res.status(409).json({
@@ -278,6 +291,21 @@ const paused = async (req, res, next) => {
   }
 };
 
+const results = async (req, res, next) => {
+  try {
+    const deviceResults = await Result.findAll({});
+    return res.status(200).json({
+      data: {
+        success: true,
+        deviceResults,
+      },
+    });
+  } catch (error) {
+    console.error(`getDevices error: ${error}`);
+    return next(error);
+  }
+};
+
 module.exports = {
   getDevices,
   getDevice,
@@ -287,4 +315,5 @@ module.exports = {
   operatingDevice,
   completed,
   paused,
+  results,
 };
