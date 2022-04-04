@@ -1,6 +1,6 @@
 <template>
   <b-navbar style="background-color: #d4cabe">
-    <b-navbar-brand href="#">RETMS</b-navbar-brand>
+    <b-navbar-brand href="#">RTEMS</b-navbar-brand>
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
@@ -41,6 +41,7 @@ export default {
     onClickLogout() {
       sessionStorage.clear();
       this.$router.push("/");
+      this.$router.go();
       console.log("success");
     },
   },

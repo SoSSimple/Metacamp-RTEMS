@@ -1,7 +1,9 @@
-import Vue from "vue";
+// import Vue from "vue";
+import Vue from "vue/dist/vue.js";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
+import VueRouter from "vue-router";
 
 // bootstrap
 import { BootstrapVue } from "bootstrap-vue";
@@ -17,6 +19,7 @@ var sessionOptions = {
 
 Vue.use(BootstrapVue);
 Vue.use(VueSession, sessionOptions);
+Vue.use(VueRouter);
 Vue.config.productionTip = false;
 
 new Vue({
