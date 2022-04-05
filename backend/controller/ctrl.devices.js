@@ -237,7 +237,7 @@ const completed = async (req, res, next) => {
 
 const paused = async (req, res, next) => {
   // const { deviceId } = req.body;
-  const { deviceName } = req.body;
+  const { deviceName, description } = req.body;
   // const exDevice = await Device.findOne({ where: { id: deviceId } });
   const exDevice = await Device.findOne({ where: { deviceName: deviceName } });
   try {
@@ -277,6 +277,7 @@ const paused = async (req, res, next) => {
       await Pause.create({
         userId: user,
         deviceId: deviceName,
+        description,
       });
       return res.status(200).json({
         data: {
