@@ -1,0 +1,4 @@
+.env memo
+  - vue에서 .env파일의 환경설정을 읽기 위해서는 반드시 VUE_APP_라는 접두사를 사용해야 한다.
+  - process.env.VUE_APP_를 통해 추출할 수 있다.
+    -> 주의 VUE_APP_SERVER에는 백엔드 서버의 값을 설정해야 한다.
