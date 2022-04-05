@@ -125,7 +125,6 @@ const operatingDevice = async (req, res, next) => {
   const { operatingState, deviceName, userId } = req.body;
   const opState = await Device.findOne({ where: { deviceName } });
   const deviceId = opState.dataValues.id;
-  console.log("------------------------", deviceId);
   try {
     if (opState.readyState == 1) {
       if (operatingState == 1) {
@@ -134,15 +133,14 @@ const operatingDevice = async (req, res, next) => {
             data: { success: false, msg: "현재 이미 가동중인 상태입니다." },
           });
         }
-        console.log("---------------------here 1");
         const user = await User.findOne({ where: { userId } });
         if (user) {
           await user.addDeviceUserLogs(parseInt(deviceId, 10));
           await Device.update(
             { operatingState, startedAt: Date.now() },
             { where: { id: deviceId } }
+            // { where: { deviceName: opState.dataValues.deviceName } }
           );
-          console.log("---------------------here 2");
           return res.status(201).json({
             data: {
               success: true,
@@ -218,7 +216,7 @@ const completed = async (req, res, next) => {
     );
     await Result.create({
       userId,
-      deviceId,
+      deviceId: deviceName,
       total,
       failedCount,
       yield,
@@ -274,10 +272,11 @@ const paused = async (req, res, next) => {
         { where: { id: deviceId } }
       );
       const exUserId = userId[0].dataValues.DeviceLog.dataValues.UserId;
-      console.log(exUserId);
+      let user = await User.findOne({ where: { id: exUserId } });
+      user = user.dataValues.userId;
       await Pause.create({
-        userId: exUserId,
-        deviceId,
+        userId: user,
+        deviceId: deviceName,
       });
       return res.status(200).json({
         data: {
@@ -294,6 +293,7 @@ const paused = async (req, res, next) => {
 const results = async (req, res, next) => {
   try {
     const deviceResults = await Result.findAll({});
+    console.log(deviceResults);
     return res.status(200).json({
       data: {
         success: true,
