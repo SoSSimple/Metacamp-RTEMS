@@ -3,11 +3,11 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
-const userSession = (req, res, next) => {
-  console.log("user session 등록", req.user);
-  res.locals.user = req.user;
-  next();
-};
+// const userSession = (req, res, next) => {
+//   console.log("user session 등록", req.user);
+//   res.locals.user = req.user;
+//   next();
+// };
 
 const getUsers = async (req, res, next) => {
   try {
@@ -27,15 +27,22 @@ const getUsers = async (req, res, next) => {
 
 const getUserLog = async (req, res, next) => {
   try {
-    const user = await User.findOne({ where: req.body.id });
+    const user = await User.findOne({ where: req.body.userId });
     if (user) {
-      // await user.addDeviceUserLogs(parseInt(req.body.deviceId, 10));
       const resultUserLogs = await user.getDeviceUserLogs({
-        where: req.body.id,
+        where: req.body.userId,
       });
-      res.status(201).json({ resultUserLogs });
+      res.status(201).json({
+        data: {
+          success: true,
+          msg: "유저의 장비 로그 가져오기",
+          resultUserLogs,
+        },
+      });
     } else {
-      res.status(404).send("no user");
+      res
+        .status(404)
+        .json({ data: { success: false, msg: "존재하지 않는 회원" } });
     }
   } catch (error) {
     console.error(error);
@@ -45,7 +52,7 @@ const getUserLog = async (req, res, next) => {
 
 const signUser = async (req, res, next) => {
   try {
-    const { name, userId, password, email } = req.body;
+    const { name, userId, password, department, role } = req.body;
     const exUser = await User.findOne({ where: { userId } });
     if (!exUser) {
       // 중복된 아이디가 없다면
@@ -54,7 +61,8 @@ const signUser = async (req, res, next) => {
         name,
         userId,
         password: hash,
-        email,
+        department,
+        role,
       });
       return res.status(201).json({
         data: {
@@ -95,9 +103,10 @@ const removeUser = async (req, res, next) => {
 };
 
 const editUser = async (req, res, next) => {
-  const { userId, name, password, role } = req.body;
-  const id = req.params;
-  console.log(id);
+  // TODO: params로 받아오는 값을 body로 수정해서 id와 password가 일치하는지 비교한 후 맞으면 수정, 아니면 에러 처리
+  const { userId, name, password, role, department } = req.body;
+  const paramUserId = req.params.id;
+  console.log(paramUserId);
   try {
     const hash = await bcrypt.hash(password, 12);
     await User.update(
@@ -105,9 +114,10 @@ const editUser = async (req, res, next) => {
         userId,
         name,
         password: hash,
+        department,
         role,
       },
-      { where: id }
+      { where: { userId: paramUserId } }
     );
     res.status(201).json({
       data: {
@@ -128,26 +138,53 @@ const loginUser = async (req, res, next) => {
       return next(authError);
     }
     if (!user) {
-      return res.status(401).json({ data: { msg: info.message } });
+      return res
+        .status(401)
+        .json({ data: { success: false, msg: info.message } });
     }
-    return req.login(user, (loginError) => {
-      if (loginError) {
-        return next(loginError);
-      }
-      let token = "";
-      token = jwt.sign(
-        {
-          userId: user.userId,
-          password: user.password,
-        },
-        "secretkey",
-        {
-          expiresIn: "10m",
+
+    // session 등록
+    req.session.user = {
+      userId: user.userId,
+      name: user.name,
+      department: user.department,
+      role: user.role,
+    };
+
+    if (req.session.user) {
+      return req.login(user, (loginError) => {
+        const { userId, name, role, department } = user;
+        if (loginError) {
+          return next(loginError);
         }
-      );
-      res.setHeader("token", token);
-      return res.status(201).json({ data: { msg: "로그인 성공", token } });
-    });
+        let token = "";
+        token = jwt.sign(
+          {
+            userId: user.userId,
+            password: user.password,
+          },
+          "secretkey",
+          {
+            expiresIn: "10m",
+          }
+        );
+        res.setHeader("token", token);
+        return res.status(201).json({
+          data: {
+            success: true,
+            msg: "로그인 성공",
+            userId,
+            name,
+            role,
+            department,
+            token,
+          },
+        });
+      });
+    } else {
+      console.log("session 등록 실패");
+      res.send("session 등록 실패");
+    }
   })(req, res, next);
 };
 
@@ -163,7 +200,7 @@ const logoutUser = (req, res) => {
 };
 
 module.exports = {
-  userSession,
+  // userSession,
   getUsers,
   getUserLog,
   signUser,
