@@ -70,8 +70,8 @@ export default {
         { text: "ADMIN", value: "admin" },
       ],
       optionsDepartment: [
-        { text: "영업팀", value: "sales" },
-        { text: "개발팀", value: "dev" },
+        { text: "sales", value: "sales" },
+        { text: "dev", value: "dev" },
       ],
     };
   },

@@ -16,16 +16,10 @@ const routes = [
     component: () => import("../views/dashboard.vue"),
   },
   {
-    path: "/department",
-    name: "department",
-    meta: {authRequired: true},
-    component: () => import("../views/department.vue"),
-  },
-  {
     path: "/user",
     name: "user",
     meta: {authRequired: true},
-    component: () => import("../views/user.vue"),
+    component: () => import("../views/user/user.vue"),
   },
   {
     path: "/device",

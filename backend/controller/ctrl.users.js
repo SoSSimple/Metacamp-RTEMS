@@ -43,18 +43,19 @@ const signUser = async (req, res, next) => {
     const exUser = await User.findOne({ where: { userId } });
     if (!exUser) {
       // 중복된 아이디가 없다면
-      res.status(201).json({
-        data: {
-          success: true,
-          msg: "가입 성공",
-        },
-      });
+      console.log(password,'test***********')
       const hash = await bcrypt.hash(password, 12);
       await User.create({
         name,
         userId,
         password: hash,
         email,
+      });
+      res.status(201).json({
+        data: {
+          success: true,
+          msg: "가입 성공",
+        },
       });
     } else {
       // 중복되는 아이디가 있으면
