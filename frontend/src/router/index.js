@@ -18,7 +18,7 @@ const routes = [
   {
     path: "/user",
     name: "user",
-    meta: {authRequired: true},
+    meta: { authRequired: true },
     component: () => import("../views/user/user.vue"),
   },
   {
@@ -55,19 +55,18 @@ const router = new VueRouter({
 
 router.beforeEach(function (to, from, next) {
   // to: 이동할 url에 해당하는 라우팅 객체
-  if (to.matched.some(function(routeInfo ) {
-    return routeInfo.meta.authRequired;
-  }) && sessionStorage.role !== 'admin') {
+  if (
+    to.matched.some(function (routeInfo) {
+      return routeInfo.meta.authRequired;
+    }) &&
+    sessionStorage.role !== "admin"
+  ) {
     // 이동할 페이지에 인증 정보가 필요하면 경고 창을 띄우고 페이지 전환은 하지 않음
-    alert('관리자 계정으로 로그인 해주세요');
+    alert("관리자 계정으로 로그인 해주세요");
   } else {
     console.log("routing success : '" + to.path + "'");
     next(); // 페이지 전환
-  };
+  }
 });
 
 export default router;
-
-
-
-
