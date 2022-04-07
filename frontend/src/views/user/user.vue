@@ -1,4 +1,3 @@
-@ -1,142 +0,0 @@
 <template>
   <div>
     <div style="margin-bottom: 5px">
@@ -80,7 +79,7 @@ export default {
     },
     onClickDelete(userData) {
       this.clickUserData = userData;
-      this.$bvModal.show("modal-user-deleteForm");
+      this.$store.dispatch("actDeleteUserList", this.clickUserData);
     },
   },
 };

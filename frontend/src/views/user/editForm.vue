@@ -6,11 +6,7 @@
           <b-form-input id="name" v-model="userData.name"></b-form-input>
         </b-form-group>
         <b-form-group label="비밀번호" label-for="password" label-cols="3">
-          <b-form-input
-            id="password"
-            @change="changePassword"
-            v-model="password"
-          ></b-form-input>
+          <b-form-input id="password" v-model="password"></b-form-input>
         </b-form-group>
         <b-form-group label="권한" label-for="role" label-cols="3">
           <select v-model="userData.role">
@@ -31,6 +27,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      password: null,
+    };
+  },
   props: {
     userData: {
       type: Object,
@@ -42,6 +43,7 @@ export default {
   computed: {},
   methods: {
     onSubmit() {
+      this.userData.password = this.password;
       this.$store.dispatch("actUpdateUserList", this.userData);
     },
   },

@@ -21,7 +21,7 @@ export default {
       state.UserList = data;
     },
     UserUpdate(state, data) {
-      state.UserList = data;
+      state.UpdatedResult = data;
     },
     UserDelete(state, data) {
       state.UserList = data;
@@ -35,6 +35,7 @@ export default {
           password: payload.password,
         })
         .then((response) => {
+          alert("로그인 성공");
           const user = {
             userId: response.data.data.userId,
             role: response.data.data.role,
@@ -44,8 +45,8 @@ export default {
           context.commit("setMe", user);
         })
         .catch((err) => {
+          alert("아이디 혹은 비밀번호가 틀립니다");
           console.log(err);
-          alert("로그인 실패");
         });
     },
 
@@ -79,6 +80,7 @@ export default {
           department: payload.department,
         })
         .then((res) => {
+          console.log(res);
           context.commit("UserUpdate", res.config.data);
         })
         .catch((err) => {
@@ -90,9 +92,7 @@ export default {
       await axios
         .delete(`http://localhost:8080/users/remove/${payload.id}`)
         .then((res) => {
-          context.commit("UserDelete", res.data.data.exUser, {
-            id: payload.id,
-          });
+          context.commit("UserDelete", res.data.data.exUser);
         })
         .catch((err) => {
           console.error(err);

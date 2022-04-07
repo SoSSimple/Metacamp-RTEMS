@@ -94,7 +94,6 @@ export default {
       };
       this.$store.dispatch("actUserLogin", payload);
       if (this.me !== null) {
-        alert("로그인 성공");
         sessionStorage.setItem("userId", this.me.userId);
         sessionStorage.setItem("name", this.me.name);
         sessionStorage.setItem("role", this.me.role);
