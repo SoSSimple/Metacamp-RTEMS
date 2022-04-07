@@ -79,7 +79,7 @@ export default {
     },
     onClickDelete(userData) {
       this.clickUserData = userData;
-      this.$store.dispatch("actDeleteUserList", this.clickUserData);
+      this.$bvModal.show("modal-user-deleteForm");
     },
   },
 };

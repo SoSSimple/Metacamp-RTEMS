@@ -45,7 +45,7 @@ export default async (element) => {
   renderElement.addEventListener(
     "webglcontextlost",
     (event) => {
-      event.preventDefault();
+      event.Default();
       render.stop();
     },
     false

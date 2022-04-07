@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.$store.dispatch("actDeleteUserList", this.userData);
+      this.$store.dispatch("actDeleteUserList", this.userData.userId);
     },
   },
 };

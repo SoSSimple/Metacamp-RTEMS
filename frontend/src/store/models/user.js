@@ -25,7 +25,8 @@ export default {
       state.UpdatedResult = data;
     },
     UserDelete(state, data) {
-      state.UserList = data;
+      console.log(state.me);
+      state.me.splice(data, 1);
     },
   },
   actions: {
@@ -51,7 +52,6 @@ export default {
         })
         .catch((err) => {
           alert("아이디 혹은 비밀번호가 틀립니다");
-          console.log(err);
         });
     },
 
@@ -86,7 +86,6 @@ export default {
           department: payload.department,
         })
         .then((res) => {
-          console.log(res);
           context.commit("UserUpdate", res.config.data);
         })
         .catch((err) => {
@@ -96,9 +95,12 @@ export default {
 
     async actDeleteUserList(context, payload) {
       await axios
-        .delete(`http://localhost:8080/users/remove/${payload.id}`)
+        .delete("http://localhost:8080/users/remove", {
+          userId: payload.userId,
+        })
         .then((res) => {
-          context.commit("UserDelete", res.data.data.exUser);
+          console.log(res);
+          context.commit("UserDelete", res);
         })
         .catch((err) => {
           console.error(err);

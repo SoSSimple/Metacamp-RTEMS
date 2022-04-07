@@ -37,7 +37,6 @@ export default {
       type: Object,
       required: true,
       default: null,
-      password: null,
     },
   },
   computed: {},
