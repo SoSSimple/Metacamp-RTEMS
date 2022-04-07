@@ -53,7 +53,7 @@
 
 <script>
 import Sidebar from "../components/layout/Sidebar.vue";
-import SignupInform from "./signupInform.vue";
+import SignupInform from "./user/signupInform.vue";
 
 export default {
   components: {

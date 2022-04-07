@@ -21,7 +21,7 @@
             <em>User</em>
           </template>
           <b-dropdown-item href="#">Profile</b-dropdown-item>
-          <b-dropdown-item v-if="logined" href="#" @click="onClickLogout"
+          <b-dropdown-item href="#" @click="onClickLogout"
             >Logout</b-dropdown-item
           >
         </b-nav-item-dropdown>
@@ -32,16 +32,8 @@
 
 <script>
 export default {
-  data() {
-    return {
-      logined: false,
-    };
-  },
-
   methods: {
     onClickLogout() {
-      this.logined = !this.logined;
-      console.log(this.logined);
       sessionStorage.clear();
       this.$router.push("/");
       this.$router.go();

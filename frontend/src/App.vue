@@ -11,6 +11,11 @@ import Header from "./components/layout/Header.vue";
 import Footer from "./components/layout/Footer.vue";
 
 export default {
+  data() {
+    return {
+      logined: false,
+    };
+  },
   components: {
     "app-header": Header,
     "app-footer": Footer,

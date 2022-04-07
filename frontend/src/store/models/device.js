@@ -5,6 +5,7 @@ export default {
   state: {
     Device: null,
     DeviceList: [],
+    DeviceInsert: [],
     DeviceResultList: [],
     DevicePauseList: [],
     EdgeOneLogs: [],
@@ -15,6 +16,7 @@ export default {
   getters: {
     Device: (state) => state.Device,
     DeviceList: (state) => state.DeviceList,
+    DeviceInsert: (state) => state.DeviceInsert,
     DeviceResultList: (state) => state.DeviceResultList,
     DevicePauseList: (state) => state.DevicePauseList,
     EdgeOneLogs: (state) => state.EdgeOneLogs,
@@ -25,6 +27,9 @@ export default {
   mutations: {
     setDeviceList(state, data) {
       state.DeviceList = data;
+    },
+    setDeviceInsert(state, data) {
+      state.DeviceInsert = data;
     },
     setDeviceResultList(state, data) {
       state.DeviceResultList = data;
@@ -52,6 +57,21 @@ export default {
         .get("http://localhost:8080/devices/")
         .then((res) => {
           context.commit("setDeviceList", res.data.data.devices);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+
+    async actDeviceInsert(context, payload) {
+      console.log(payload);
+      await axios
+        .post("http://localhost:8080/devices/create/", {
+          readyState: payload.readyState,
+          deviceName: payload.deviceName,
+        })
+        .then((res) => {
+          context.commit("setDeviceInsert", res.data.data.devices);
         })
         .catch((err) => {
           console.error(err);

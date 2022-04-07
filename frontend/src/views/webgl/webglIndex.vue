@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import Three from "../js/example.js";
+import Three from "../../js/example.js";
 
 let helloEdukit = {
   template: `<div ref="webgl"></div>`,

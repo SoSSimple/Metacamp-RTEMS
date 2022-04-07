@@ -8,6 +8,7 @@ export default {
     UserList: [],
     UpdatedResult: null,
     DeletedResult: null,
+    loggedIn: false,
   },
   getters: {
     me: (state) => state.me,

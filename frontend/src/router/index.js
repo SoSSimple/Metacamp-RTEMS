@@ -24,7 +24,7 @@ const routes = [
   {
     path: "/device",
     name: "device",
-    component: () => import("../views/device.vue"),
+    component: () => import("../views/device/device.vue"),
   },
   {
     path: "/workorder",
@@ -39,7 +39,7 @@ const routes = [
   {
     path: "/webgl",
     name: "webgl",
-    component: () => import("../views/webgl.vue"),
+    component: () => import("../views/webgl/webgl.vue"),
   },
   {
     path: "*",

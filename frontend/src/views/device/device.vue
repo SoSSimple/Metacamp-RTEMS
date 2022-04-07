@@ -7,13 +7,10 @@
         </b-col>
         <b-col>
           <b-row style="margin-right: 8px">
-            <b-col style="text-align: left; margin-bottom: 10px"
-              ><b-button variant="primary" size="sm" @click="searchDeviceList"
-                >검색</b-button
-              ></b-col
-            >
             <b-col style="text-align: right; margin-bottom: 10px"
-              ><b-button variant="success" size="sm">신규등록</b-button></b-col
+              ><b-button variant="success" size="sm" @click="onCreateDeviceList"
+                >신규등록</b-button
+              ></b-col
             >
           </b-row>
           <div style="margin-right: 22px">
@@ -31,18 +28,21 @@
         </b-col>
       </b-row>
     </div>
-    <inform />
+    <Editinform />
+    <InsertForm />
   </div>
 </template>
 
 <script>
-import Sidebar from "../components/layout/Sidebar.vue";
-import DeviceInform from "./deviceInform.vue";
+import Sidebar from "../../components/layout/Sidebar.vue";
+import EditForm from "./editForm.vue";
+import InsertForm from "./insertForm.vue";
 
 export default {
   components: {
     "app-sidebar": Sidebar,
-    inform: DeviceInform,
+    Editinform: EditForm,
+    InsertForm: InsertForm,
   },
   data() {
     return {
@@ -68,14 +68,11 @@ export default {
     searchDeviceList() {
       this.$store.dispatch("actDeviceList");
     },
+    onCreateDeviceList() {
+      this.$bvModal.show("modal-device-insert-inform");
+    },
     onClickEdit() {
-      // this.$store.dispatch("actDepartmentInputMode", "update");
-
-      // 2. 상세정보 호출
-      // this.$store.dispatch("actDepartmentInfo", id);
-
-      // 3. 모달 출력
-      this.$bvModal.show("modal-device-inform");
+      this.$bvModal.show("modal-device-edit-inform");
     },
   },
 };

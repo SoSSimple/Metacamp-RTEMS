@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import edukit from "./WebglIndex.vue";
-import Sidebar from "../components/layout/Sidebar.vue";
+import edukit from "./webglIndex.vue";
+import Sidebar from "../../components/layout/Sidebar.vue";
 
 export default {
   name: "App",
