@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
+import router from "@/router/index.js";
 
 export default {
   state: {
@@ -42,6 +43,10 @@ export default {
             name: response.data.data.name,
             department: response.data.data.department,
           };
+          sessionStorage.setItem("userId", response.data.data.userId);
+          sessionStorage.setItem("name", response.data.data.name);
+          sessionStorage.setItem("role", response.data.data.role);
+          router.push("/webgl");
           context.commit("setMe", user);
         })
         .catch((err) => {
@@ -73,7 +78,8 @@ export default {
 
     async actUpdateUserList(context, payload) {
       await axios
-        .patch(`http://localhost:8080/users/edit/${payload.id}`, {
+        .patch(`http://localhost:8080/users/edit/`, {
+          id: payload.id,
           password: payload.password,
           name: payload.name,
           role: payload.role,

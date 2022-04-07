@@ -43,8 +43,14 @@ export default {
   computed: {},
   methods: {
     onSubmit() {
-      this.userData.password = this.password;
-      this.$store.dispatch("actUpdateUserList", this.userData);
+      const payload = {
+        name: this.userData.name,
+        password: this.password,
+        role: this.userData.role,
+        department: this.userData.department,
+        id: this.userData.id,
+      };
+      this.$store.dispatch("actUpdateUserList", payload);
     },
   },
 };

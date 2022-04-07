@@ -93,12 +93,6 @@ export default {
         password: this.form.password,
       };
       this.$store.dispatch("actUserLogin", payload);
-      if (this.me !== null) {
-        sessionStorage.setItem("userId", this.me.userId);
-        sessionStorage.setItem("name", this.me.name);
-        sessionStorage.setItem("role", this.me.role);
-        this.$router.push("/webgl");
-      }
     },
     onSubmitSignup() {
       this.$bvModal.show("modal-signup-inform");
