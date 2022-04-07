@@ -54,7 +54,7 @@ router.post(
 router.delete("/remove", ctrlUsers.removeUser);
 
 // POST /users/edit/:id 회원 정보 전체 수정
-router.patch("/edit/:id", ctrlUsers.editUser);
+router.patch("/edit", ctrlUsers.editUser);
 
 // POST /users/login
 router.post("/login", ctrlUsers.loginUser);
