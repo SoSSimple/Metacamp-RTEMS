@@ -110,7 +110,7 @@ export default {
     async actDeviceOperating(context, payload) {
       console.log("actions", payload);
       await axios.patch("http://localhost:8080/devices/operating", {
-        operatingState: payload.operatingState,
+        writeEditReason: payload.writeEditReason,
         deviceName: payload.deviceName,
         userId: payload.userId,
       });
@@ -129,6 +129,7 @@ export default {
     async actDevicePause(context, payload) {
       await axios.post("http://localhost:8080/devices/pause", {
         deviceName: payload.deviceName,
+        writeDeleteReason: payload.writeDeleteReason,
       });
     },
 

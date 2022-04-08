@@ -31,8 +31,8 @@ export default {
     },
   },
   actions: {
-    async actUserLogin(context, payload) {
-      await axios
+    actUserLogin(context, payload) {
+      axios
         .post("http://localhost:8080/users/login", {
           userId: payload.userId,
           password: payload.password,
@@ -56,8 +56,8 @@ export default {
         });
     },
 
-    async actSignup(context, payload) {
-      await axios.post("http://localhost:8080/users/signup", {
+    actSignup(context, payload) {
+      axios.post("http://localhost:8080/users/signup", {
         userId: payload.userId,
         password: payload.password,
         name: payload.name,
