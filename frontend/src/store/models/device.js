@@ -64,7 +64,6 @@ export default {
     },
 
     async actDeviceInsert(context, payload) {
-      console.log(payload);
       await axios
         .post("http://localhost:8080/devices/create/", {
           readyState: payload.readyState,

@@ -16,5 +16,7 @@ module.exports = {
           endOfLine: 'auto',
       },
   ],
+  
+  
   },
 };

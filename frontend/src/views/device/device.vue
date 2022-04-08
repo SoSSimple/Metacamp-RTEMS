@@ -61,6 +61,12 @@ export default {
       return this.$store.getters.DeviceList;
     },
   },
+  watch: {
+    // 모달이 열린 이후에 감지됨
+    deviceList() {
+      this.searchDeviceList();
+    },
+  },
   created() {
     this.searchDeviceList();
   },
@@ -68,11 +74,11 @@ export default {
     searchDeviceList() {
       this.$store.dispatch("actDeviceList");
     },
-    onCreateDeviceList() {
-      this.$bvModal.show("modal-device-insert-inform");
-    },
     onClickEdit() {
       this.$bvModal.show("modal-device-edit-inform");
+    },
+    onCreateDeviceList() {
+      this.$bvModal.show("modal-device-insert-inform");
     },
   },
 };
