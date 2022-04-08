@@ -91,14 +91,12 @@ export default {
       total: null,
       failedCount: null,
       description: null,
+      me: sessionStorage,
     };
   },
   computed: {
     deviceList() {
       return this.$store.getters.DeviceList;
-    },
-    me() {
-      return this.$store.getters.me;
     },
     inputMode() {
       return this.$store.getters.DeviceInputMode;
@@ -123,6 +121,7 @@ export default {
       this.$store.dispatch("actDeviceList");
     },
     onSubmit() {
+      this.me;
       // 1. 가동 수정인 경우
       if (this.inputMode === "update") {
         if (this.selectedOperating == "on") {
@@ -153,7 +152,6 @@ export default {
           failedCount: this.failedCount,
           description: this.description,
         };
-        console.log(payload);
         this.$store.dispatch("actDeviceComplete", payload);
       }
 
