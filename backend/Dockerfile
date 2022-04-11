@@ -1,7 +1,9 @@
 FROM node:16
 
-COPY ./ ./
+COPY package.json ./
 
-RUN npm i
+RUN npm install
+
+COPY ./ ./
 
 CMD ["node", "app.js"]
