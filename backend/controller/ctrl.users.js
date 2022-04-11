@@ -86,8 +86,10 @@ const signUser = async (req, res, next) => {
 };
 
 const removeUser = async (req, res, next) => {
-  const userId = req.body.userId;
+  // console.log(req.body);
   try {
+    const { userId } = req.body;
+    console.log(userId);
     const result = await User.destroy({ where: { userId } });
     res.status(201).json({
       data: {
@@ -100,6 +102,19 @@ const removeUser = async (req, res, next) => {
     console.error(`removeUser error: ${error}`);
     return next(error);
   }
+  // try {
+  //   const id = req.params.id;
+  //   const result = await User.destroy({ where: { id } });
+  //   res.status(201).json({
+  //     data: {
+  //       msg: "회원탈퇴 성공",
+  //       succes: true,
+  //       result,
+  //     },
+  //   });
+  // } catch (error) {
+  //   return next(error);
+  // }
 };
 
 const editUser = async (req, res, next) => {
