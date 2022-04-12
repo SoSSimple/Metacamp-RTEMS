@@ -28,8 +28,8 @@
         </b-col>
       </b-row>
     </div>
-    <Editinform />
-    <InsertForm />
+    <EditInform />
+    <InsertForm @addDevice="searchDeviceList()" />
   </div>
 </template>
 
@@ -41,7 +41,7 @@ import InsertForm from "./insertForm.vue";
 export default {
   components: {
     "app-sidebar": Sidebar,
-    Editinform: EditForm,
+    EditInform: EditForm,
     InsertForm: InsertForm,
   },
   data() {
@@ -59,12 +59,6 @@ export default {
   computed: {
     deviceList() {
       return this.$store.getters.DeviceList;
-    },
-  },
-  watch: {
-    // 모달이 열린 이후에 감지됨
-    deviceList() {
-      this.searchDeviceList();
     },
   },
   created() {

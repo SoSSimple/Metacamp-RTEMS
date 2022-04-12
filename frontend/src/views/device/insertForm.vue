@@ -42,22 +42,24 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       if (this.readyState === "on") {
         this.returnSelected = true;
         const payload = {
           readyState: this.readyState,
           deviceName: this.deviceName,
         };
-        this.$store.dispatch("actDeviceReady", payload);
+        await this.$store.dispatch("actDeviceReady", payload);
       } else {
         this.returnSelected = false;
         const payload = {
           readyState: this.readyState,
           deviceName: this.deviceName,
         };
-        this.$store.dispatch("actDeviceInsert", payload);
+        await this.$store.dispatch("actDeviceInsert", payload);
       }
+
+      await this.$emit("addDevice");
     },
   },
 };

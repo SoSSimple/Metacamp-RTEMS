@@ -1,7 +1,7 @@
 <template>
   <div>
-    <app-header />
-    <router-view />
+    <app-header v-if="this.$route.meta.header !== false" />
+    <router-view class="main" />
     <app-footer />
   </div>
 </template>
@@ -11,11 +11,6 @@ import Header from "./components/layout/Header.vue";
 import Footer from "./components/layout/Footer.vue";
 
 export default {
-  data() {
-    return {
-      logined: false,
-    };
-  },
   components: {
     "app-header": Header,
     "app-footer": Footer,
@@ -23,4 +18,8 @@ export default {
 };
 </script>
 
-<style src="./assets/style/main.css"></style>
+<style>
+body {
+  background-color: #f0f2f5 !important;
+}
+</style>

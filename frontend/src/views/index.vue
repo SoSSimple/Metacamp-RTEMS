@@ -1,16 +1,13 @@
 <template>
   <div v-if="valid">
-    <b-container fluid style="padding-left: 0px">
+    <b-container>
       <b-row>
-        <b-col
-          cols="2"
-          style="padding-right: 0px; margin-left: 8px; margin-right: 8px"
-        >
+        <b-col cols="2">
           <app-sidebar />
         </b-col>
-        <b-col style="padding-left: 0px; padding-right: 0px">
-          <div class="content-body">
-            <router-view />
+        <b-col>
+          <div>
+            <router-view class="content-body" />
           </div>
         </b-col>
       </b-row>
@@ -21,7 +18,7 @@
     <h1>login</h1>
     <div>
       <b-form @submit="onSubmit">
-        <b-form-group id="input-group-1" label-for="input-1">
+        <b-form-group class="userId" id="input-group-1" label-for="input-1">
           <b-form-input
             id="input-1"
             v-model="form.id"
@@ -31,7 +28,11 @@
           </b-form-input>
         </b-form-group>
 
-        <b-form-group id="input-group-2" label-for="input-2">
+        <b-form-group
+          class="userPassword"
+          id="input-group-2"
+          label-for="input-2"
+        >
           <b-form-input
             id="input-2"
             v-model="form.password"
@@ -41,9 +42,7 @@
           >
           </b-form-input>
         </b-form-group>
-        <b-button type="submit" variant="primary" style="margin: 5px"
-          >Submit</b-button
-        >
+        <b-button type="submit" variant="primary">Submit</b-button>
         <b-button @click="onSubmitSignup">signup</b-button>
       </b-form>
     </div>
@@ -81,17 +80,32 @@ export default {
   methods: {
     searchUserSession() {
       if (sessionStorage.length > 0) {
-        this.valid = true;
+        this.valid = false;
       } else {
         this.valid = false;
       }
     },
     onSubmit(event) {
       event.preventDefault();
+      this.$route.meta.header = true;
       const payload = {
         userId: this.form.id,
         password: this.form.password,
       };
+      // const idValidation = /^[a-z]+[a-z0-9]{5,19}$/g; // 영문자로 시작하는 영문자 또는 숫자 6~20자
+      // const passwordValidation = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/; //8 ~ 16자 영문, 숫자 조합
+      //
+      // if (!idValidation.test(payload.userId)) {
+      //   alert("아이디가 조건에 맞지 않습니다");
+      //   return;
+      // }
+      //
+      // console.log(passwordValidation.test(payload.password));
+      // if (!passwordValidation.test(payload.password)) {
+      //   alert("8 ~ 16자 영문, 숫자 조합");
+      //   return;
+      // }
+
       this.$store.dispatch("actUserLogin", payload);
     },
     onSubmitSignup() {
@@ -100,3 +114,76 @@ export default {
   },
 };
 </script>
+
+<style>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  width: 50px;
+}
+
+.container form {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.btn-primary {
+  margin-bottom: 5px;
+}
+
+.col {
+  margin: auto 1%;
+}
+
+@media (max-width: 1600px) {
+  .col {
+    margin: auto 5%;
+  }
+}
+
+@media (max-width: 1400px) {
+  .col {
+    margin: auto 5%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .col {
+    margin: auto 30%;
+  }
+}
+
+@media (max-width: 1000px) {
+  .col {
+    margin: auto 40%;
+  }
+}
+
+@media (max-width: 800px) {
+  .col {
+    margin: auto 50%;
+  }
+}
+
+@media (max-width: 600px) {
+  .col {
+    margin: auto 60%;
+  }
+}
+@media (max-width: 400px) {
+  .col {
+    margin: auto 70%;
+  }
+}
+
+@media (max-width: 300px) {
+  .col {
+    margin: auto 90%;
+  }
+}
+</style>
