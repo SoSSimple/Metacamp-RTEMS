@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div style="margin-bottom: 5px">
+    <div style="margin-bottom: 5px; width: 100%">
       <b-row>
         <b-col cols="2">
           <app-sidebar />
@@ -19,7 +19,7 @@
               ><b-button variant="success" size="sm">신규등록</b-button></b-col
             >
           </b-row>
-          <div style="margin-right: 22px">
+          <div>
             <b-table
               small
               hover

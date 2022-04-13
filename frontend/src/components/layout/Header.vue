@@ -1,6 +1,8 @@
 <template>
   <b-navbar class="header">
-    <b-navbar-brand href="#" style="color: white">RTEMS</b-navbar-brand>
+    <b-navbar-brand href="#" style="color: white; margin-left: 15px"
+      >RTEMS</b-navbar-brand
+    >
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
     <b-collapse id="nav-collapse" is-nav>
       <!-- Right aligned nav items -->
@@ -34,8 +36,11 @@ export default {
 
 <style scoped>
 .header {
+  position: fixed;
+  width: 100%;
   background-color: #042331;
   padding: 25px;
+  z-index: 100;
 }
 .dropdown {
   color: white;

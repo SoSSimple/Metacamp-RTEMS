@@ -22,4 +22,12 @@ export default {
 body {
   background-color: #f0f2f5 !important;
 }
+.main {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+.main table {
+  margin-top: 100px;
+}
 </style>

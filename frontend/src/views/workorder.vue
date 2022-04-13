@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div style="margin-bottom: 5px">
+    <div style="margin-bottom: 5px; width: 100%">
       <b-row>
         <b-col cols="2">
           <app-sidebar />
         </b-col>
         <b-col>
-          <div style="margin-right: 22px">
+          <div>
             <h2>모든 장비 목록</h2>
             <b-table small hover striped :items="deviceList" :fields="fields">
               <template #cell(updatedBtn)="row">
@@ -36,7 +36,7 @@
             </b-table>
           </div>
           <br />
-          <div style="margin-right: 22px">
+          <div>
             <hr />
             <h2>장비 사용 기록</h2>
             <br />
@@ -51,7 +51,7 @@
               >
               </b-table>
             </div>
-            <div style="margin-right: 22px">
+            <div>
               <h4>Edge-2 기록</h4>
               <b-table
                 small
@@ -62,7 +62,7 @@
               >
               </b-table>
             </div>
-            <div style="margin-right: 22px">
+            <div>
               <h4>Edge-3 기록</h4>
               <b-table
                 small
