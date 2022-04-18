@@ -136,13 +136,13 @@ export default {
 
 @media (max-width: 1280px) {
   .col {
-    margin: 0 0 0 150px;
+    margin: 0 0 0 350px;
   }
 }
 
 @media (max-width: 1000px) {
   .col {
-    margin: 0 0 0 200px;
+    margin: 0 0 0 500px;
   }
 }
 
