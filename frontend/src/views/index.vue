@@ -1,20 +1,5 @@
 <template>
-  <div v-if="valid">
-    <b-container>
-      <b-row>
-        <b-col cols="2">
-          <app-sidebar />
-        </b-col>
-        <b-col>
-          <div>
-            <router-view class="content-body" />
-          </div>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
-
-  <b-container v-else>
+  <b-container>
     <h1>login</h1>
     <div>
       <b-form @submit="onSubmit">
@@ -51,17 +36,14 @@
 </template>
 
 <script>
-import Sidebar from "../components/layout/Sidebar.vue";
 import SignupInform from "./user/signupInform.vue";
 
 export default {
   components: {
-    "app-sidebar": Sidebar,
     inform: SignupInform,
   },
   data() {
     return {
-      valid: false,
       form: {
         id: "",
         password: "",
@@ -137,53 +119,53 @@ export default {
 }
 
 .col {
-  margin: auto 1%;
+  margin: 60px 1%;
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1700px) {
   .col {
-    margin: auto 5%;
+    margin: 0 0 0 50px;
   }
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 1580px) {
   .col {
-    margin: auto 5%;
+    margin: 0 0 0 100px;
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1280px) {
   .col {
-    margin: auto 30%;
+    margin: 0 0 0 150px;
   }
 }
 
 @media (max-width: 1000px) {
   .col {
-    margin: auto 40%;
+    margin: 0 0 0 200px;
   }
 }
 
-@media (max-width: 800px) {
+@media (max-width: 820px) {
   .col {
-    margin: auto 50%;
+    margin: 50px 50%;
   }
 }
 
 @media (max-width: 600px) {
   .col {
-    margin: auto 60%;
+    margin: 50px 60%;
   }
 }
 @media (max-width: 400px) {
   .col {
-    margin: auto 70%;
+    margin: 50px 70%;
   }
 }
 
 @media (max-width: 300px) {
   .col {
-    margin: auto 90%;
+    margin: 50px 95%;
   }
 }
 </style>

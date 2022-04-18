@@ -84,3 +84,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.col {
+  margin-top: 0;
+}
+</style>

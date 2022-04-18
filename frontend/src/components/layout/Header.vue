@@ -1,6 +1,9 @@
 <template>
   <b-navbar class="header">
-    <b-navbar-brand href="#" style="color: white; margin-left: 15px"
+    <b-navbar-brand
+      href="#"
+      style="color: white; margin-left: 15px"
+      @click="$router.push('/webgl')"
       >RTEMS</b-navbar-brand
     >
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>

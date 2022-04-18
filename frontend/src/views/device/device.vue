@@ -6,7 +6,7 @@
           <app-sidebar />
         </b-col>
         <b-col>
-          <b-row style="margin-right: 8px">
+          <b-row>
             <b-col style="text-align: right; margin-bottom: 10px"
               ><b-button variant="success" size="sm" @click="onCreateDeviceList"
                 >신규등록</b-button
@@ -77,3 +77,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.col {
+  margin-top: 60px;
+}
+</style>

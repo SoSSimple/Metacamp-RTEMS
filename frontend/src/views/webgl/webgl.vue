@@ -14,14 +14,14 @@
 </template>
 
 <script>
-import edukit from "./webglIndex.vue";
 import Sidebar from "../../components/layout/Sidebar.vue";
+import edukit from "./webglIndex.vue";
 
 export default {
   name: "App",
   components: {
-    edukit,
     "app-sidebar": Sidebar,
+    edukit,
   },
 };
 </script>

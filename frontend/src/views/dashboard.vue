@@ -6,7 +6,7 @@
           <app-sidebar />
         </b-col>
         <b-col>
-          <b-row style="margin-right: 8px">
+          <b-row style="margin-top: 100px">
             <b-col style="text-align: left; margin-bottom: 10px"
               ><b-button
                 variant="primary"
@@ -53,3 +53,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.col {
+  margin-top: 20px;
+}
+</style>
