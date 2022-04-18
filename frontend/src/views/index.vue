@@ -119,51 +119,51 @@ export default {
 }
 
 .col {
-  margin: 60px 1%;
+  margin: 100px 1%;
 }
 
 @media (max-width: 1700px) {
   .col {
-    margin: 0 0 0 50px;
+    margin: 100px 5%;
   }
 }
 
 @media (max-width: 1580px) {
   .col {
-    margin: 0 0 0 100px;
+    margin: 100px 10%;
   }
 }
 
 @media (max-width: 1280px) {
   .col {
-    margin: 0 0 0 350px;
+    margin: 100px 15%;
   }
 }
 
 @media (max-width: 1000px) {
   .col {
-    margin: 0 0 0 500px;
+    margin: 0 0 0 200px;
   }
 }
 
 @media (max-width: 820px) {
   .col {
-    margin: 50px 50%;
+    margin: 0 0 0 250px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 620px) {
   .col {
     margin: 50px 60%;
   }
 }
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .col {
     margin: 50px 70%;
   }
 }
 
-@media (max-width: 300px) {
+@media (max-width: 380px) {
   .col {
     margin: 50px 95%;
   }

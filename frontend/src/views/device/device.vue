@@ -1,17 +1,17 @@
 <template>
   <div>
-    <div style="margin-bottom: 5px; width: 100%">
+    <div>
       <b-row>
         <b-col cols="2">
           <app-sidebar />
         </b-col>
         <b-col>
           <b-row>
-            <b-col style="text-align: right; margin-bottom: 10px"
-              ><b-button variant="success" size="sm" @click="onCreateDeviceList"
+            <b-col style="text-align: right">
+              <b-button variant="success" size="sm" @click="onCreateDeviceList"
                 >신규등록</b-button
-              ></b-col
-            >
+              >
+            </b-col>
           </b-row>
           <div>
             <b-table small hover striped :items="deviceList" :fields="fields">
@@ -81,5 +81,6 @@ export default {
 <style scoped>
 .col {
   margin-top: 60px;
+  margin-bottom: 0px;
 }
 </style>

@@ -3,7 +3,7 @@
     <div style="margin-bottom: 5px; width: 100%">
       <b-row>
         <b-col cols="2">
-          <app-sidebar margin-top: 93px; />
+          <app-sidebar />
         </b-col>
         <b-col>
           <div>

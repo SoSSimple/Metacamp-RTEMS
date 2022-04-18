@@ -22,11 +22,6 @@ const routes = [
     component: () => import("../views/example.vue"),
   },
   {
-    path: "/example2",
-    name: "example2",
-    component: () => import("../views/example2.vue"),
-  },
-  {
     path: "/user",
     name: "user",
     meta: { authRequired: true },

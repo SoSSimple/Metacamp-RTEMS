@@ -2,14 +2,13 @@
   <div>
     <div class="sidebar" style="margin-top: 93px">
       <ul>
-        <li @click="$router.push('/webgl')"><a href="#">디지털트윈</a></li>
-        <li @click="$router.push('/dashboard')"><a href="#">대시보드</a></li>
-        <li @click="$router.push('/example')"><a href="#">example</a></li>
-        <li @click="$router.push('/example2')"><a href="#">example2</a></li>
-        <li @click="$router.push('/user')"><a href="#">사용자 관리</a></li>
-        <li @click="$router.push('/device')"><a href="#">장비 관리</a></li>
-        <li @click="$router.push('/workorder')"><a href="#">작업지시서</a></li>
-        <li @click="$router.push('/result')"><a href="#">작업결과</a></li>
+        <li @click="$router.push('/webgl')">디지털트윈</li>
+        <li @click="$router.push('/dashboard')">대시보드</li>
+        <li @click="$router.push('/example')">example</li>
+        <li @click="$router.push('/user')">사용자 관리</li>
+        <li @click="$router.push('/device')">장비 관리</li>
+        <li @click="$router.push('/workorder')">작업지시서</li>
+        <li @click="$router.push('/result')">작업결과</li>
       </ul>
     </div>
   </div>
@@ -27,13 +26,14 @@ export default {};
   text-decoration: none;
 }
 .sidebar {
+  display: block;
   position: fixed;
   left: 0;
   width: 310px;
   height: 100%;
   background: #042331;
 }
-.sidebar ul a {
+.sidebar ul {
   display: block;
   height: 100%;
   width: 100%;
@@ -45,6 +45,7 @@ export default {};
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-bottom: 1px solid black;
   transition: 0.4s;
+  cursor: pointer;
 }
 
 ul li:hover a {
