@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div class="sidebar">
+    <div class="sidebar" style="margin-top: 93px">
       <ul>
         <li @click="$router.push('/webgl')"><a href="#">디지털트윈</a></li>
         <li @click="$router.push('/dashboard')"><a href="#">대시보드</a></li>
+        <li @click="$router.push('/example')"><a href="#">example</a></li>
+        <li @click="$router.push('/example2')"><a href="#">example2</a></li>
         <li @click="$router.push('/user')"><a href="#">사용자 관리</a></li>
         <li @click="$router.push('/device')"><a href="#">장비 관리</a></li>
         <li @click="$router.push('/workorder')"><a href="#">작업지시서</a></li>
@@ -11,26 +13,6 @@
       </ul>
     </div>
   </div>
-  <!--  <b-list-group>-->
-  <!--    <b-list-group-item href="#" @click="$router.push('/webgl')"-->
-  <!--      >디지털트윈</b-list-group-item-->
-  <!--    >-->
-  <!--    <b-list-group-item href="#" @click="$router.push('/dashboard')"-->
-  <!--      >대시보드</b-list-group-item-->
-  <!--    >-->
-  <!--    <b-list-group-item href="#" @click="$router.push('/user')"-->
-  <!--      >사용자 관리</b-list-group-item-->
-  <!--    >-->
-  <!--    <b-list-group-item href="#" @click="$router.push('/device')"-->
-  <!--      >장비 관리</b-list-group-item-->
-  <!--    >-->
-  <!--    <b-list-group-item href="#" @click="$router.push('/workorder')"-->
-  <!--      >작업지시서</b-list-group-item-->
-  <!--    >-->
-  <!--    <b-list-group-item href="#" @click="$router.push('/result')"-->
-  <!--      >작업결과</b-list-group-item-->
-  <!--    >-->
-  <!--  </b-list-group>-->
 </template>
 
 <script>
