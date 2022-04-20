@@ -160,6 +160,7 @@ export default {
           deviceName: this.selectedDevice,
           description: this.description,
         };
+        console.log(this.stop);
         this.$store.dispatch("actDevicePause", payload);
       }
     },

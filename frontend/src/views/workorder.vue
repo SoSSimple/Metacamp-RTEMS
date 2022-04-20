@@ -84,6 +84,7 @@
 <script>
 import Sidebar from "../components/layout/Sidebar.vue";
 import OrderInform from "./orderInform.vue";
+import mqtt from "mqtt";
 
 export default {
   components: {
@@ -92,6 +93,26 @@ export default {
   },
   data() {
     return {
+      subscription: {
+        topic: "topic/mqttx",
+        qos: 0,
+      },
+      publish: {
+        topic: "topic/browser",
+        qos: 0,
+        payload: '{ "msg": "Hello, I am browser." }',
+      },
+      receiveNews: "",
+      qosList: [
+        { label: 0, value: 0 },
+        { label: 1, value: 1 },
+        { label: 2, value: 2 },
+      ],
+      client: {
+        connected: false,
+      },
+      subscribeSuccess: false,
+
       fields: [
         { key: "deviceName", label: "장비명" },
         { key: "readyState", label: "준비 상태" },
@@ -124,12 +145,42 @@ export default {
     },
   },
   created() {
+    this.createConnection();
     this.searchDeviceList();
     this.searchEdgeOneLogList();
     this.searchEdgeTwoLogList();
     this.searchEdgeThreeLogList();
   },
+
   methods: {
+    createConnection() {
+      // Connect string, and specify the connection method used through protocol
+      // ws unencrypted WebSocket connection
+      // wss encrypted WebSocket connection
+      // mqtt unencrypted TCP connection
+      // mqtts encrypted TCP connection
+      // wxs WeChat mini app connection
+      // alis Alipay mini app connection
+      const connectUrl = process.env.VUE_APP_MQTT;
+
+      console.log(connectUrl);
+      try {
+        this.client = mqtt.connect(connectUrl);
+      } catch (error) {
+        console.log("mqtt.connect error", error);
+      }
+      console.log(this.client.on);
+      this.client.on("connect", () => {
+        console.log("Connection succeeded!");
+      });
+      this.client.on("error", (error) => {
+        console.log("Connection failed", error);
+      });
+      this.client.on("message", (topic, message) => {
+        this.receiveNews = this.receiveNews.concat(message);
+        console.log(`Received message ${message} from topic ${topic}`);
+      });
+    },
     searchDeviceList() {
       this.$store.dispatch("actDeviceList");
     },

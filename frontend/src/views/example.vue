@@ -5,6 +5,11 @@
         <b-col cols="2">
           <app-sidebar />
         </b-col>
+        <b-col>
+          <b-row style="margin-top: 100px">
+            <b-col style="text-align: right"> </b-col>
+          </b-row>
+        </b-col>
       </b-row>
     </div>
   </div>
