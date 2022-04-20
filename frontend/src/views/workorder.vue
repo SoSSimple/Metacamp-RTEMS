@@ -7,7 +7,7 @@
         </b-col>
         <b-col>
           <div>
-            <h2>모든 장비 목록</h2>
+            <h2>모든 장비 목록 {{ mqttData }}</h2>
             <b-table small hover striped :items="deviceList" :fields="fields">
               <template #cell(updatedBtn)="row">
                 <b-button
@@ -94,15 +94,10 @@ export default {
   data() {
     return {
       subscription: {
-        topic: "topic/mqttx",
+        topic: "UVC-EDU-01",
         qos: 0,
       },
-      publish: {
-        topic: "topic/browser",
-        qos: 0,
-        payload: '{ "msg": "Hello, I am browser." }',
-      },
-      receiveNews: "",
+      mqttData: "",
       qosList: [
         { label: 0, value: 0 },
         { label: 1, value: 1 },
@@ -118,7 +113,7 @@ export default {
         { key: "readyState", label: "준비 상태" },
         { key: "operatingState", label: "가동 상태" },
         { key: "startedAt", label: "가동 시작 시간" },
-        { key: "updatedBtn", label: "가동 수정" },
+        { key: "updatedBtn", label: "가동" },
         { key: "completedBtn", label: "완료" },
         { key: "pausedBtn", label: "비상정지" },
       ],
@@ -169,16 +164,19 @@ export default {
       } catch (error) {
         console.log("mqtt.connect error", error);
       }
-      console.log(this.client.on);
+      // console.log(this.client.on);
       this.client.on("connect", () => {
+        const topic = "UVC-EDU-01";
+        this.client.subscribe(topic, {}, (error) => {
+          if (error) {
+            console.error("mqtt client", error);
+          }
+        });
         console.log("Connection succeeded!");
       });
-      this.client.on("error", (error) => {
-        console.log("Connection failed", error);
-      });
       this.client.on("message", (topic, message) => {
-        this.receiveNews = this.receiveNews.concat(message);
-        console.log(`Received message ${message} from topic ${topic}`);
+        this.mqttData = JSON.parse(message);
+        console.log(this.mqttData);
       });
     },
     searchDeviceList() {
