@@ -2,9 +2,6 @@
   <div>
     <div style="margin-bottom: 5px; width: 100%">
       <b-row>
-        <b-col cols="2">
-          <app-sidebar />
-        </b-col>
         <b-col>
           <div>
             <h2>모든 장비 목록 {{ mqttData }}</h2>
@@ -82,13 +79,11 @@
 </template>
 
 <script>
-import Sidebar from "../components/layout/Sidebar.vue";
 import OrderInform from "./orderInform.vue";
 import mqtt from "mqtt";
 
 export default {
   components: {
-    "app-sidebar": Sidebar,
     inform: OrderInform,
   },
   data() {

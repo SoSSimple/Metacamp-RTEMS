@@ -2,9 +2,6 @@
   <div>
     <div>
       <b-row>
-        <b-col cols="2">
-          <app-sidebar />
-        </b-col>
         <b-col>
           <b-row>
             <b-col style="text-align: right">
@@ -34,13 +31,11 @@
 </template>
 
 <script>
-import Sidebar from "../../components/layout/Sidebar.vue";
 import EditForm from "./editForm.vue";
 import InsertForm from "./insertForm.vue";
 
 export default {
   components: {
-    "app-sidebar": Sidebar,
     EditInform: EditForm,
     InsertForm: InsertForm,
   },

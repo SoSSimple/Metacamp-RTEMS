@@ -2,18 +2,15 @@
   <div>
     <app-header v-if="this.$route.meta.header !== false" />
     <router-view class="main" />
-    <app-footer />
   </div>
 </template>
 
 <script>
 import Header from "./components/layout/Header.vue";
-import Footer from "./components/layout/Footer.vue";
 
 export default {
   components: {
     "app-header": Header,
-    "app-footer": Footer,
   },
 };
 </script>

@@ -76,12 +76,12 @@ export default {
       };
       // const idValidation = /^[a-z]+[a-z0-9]{5,19}$/g; // 영문자로 시작하는 영문자 또는 숫자 6~20자
       // const passwordValidation = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,16}$/; //8 ~ 16자 영문, 숫자 조합
-      //
+
       // if (!idValidation.test(payload.userId)) {
       //   alert("아이디가 조건에 맞지 않습니다");
       //   return;
       // }
-      //
+
       // console.log(passwordValidation.test(payload.password));
       // if (!passwordValidation.test(payload.password)) {
       //   alert("8 ~ 16자 영문, 숫자 조합");

@@ -2,9 +2,6 @@
   <div>
     <div style="margin-bottom: 5px; width: 100%">
       <b-row>
-        <b-col cols="2">
-          <app-sidebar />
-        </b-col>
         <b-col>
           <div>
             <b-table small hover striped :items="userList" :fields="fields">
@@ -35,13 +32,11 @@
 </template>
 
 <script>
-import Sidebar from "../../components/layout/Sidebar.vue";
 import editForm from "./editForm.vue";
 import deleteForm from "./deleteForm.vue";
 
 export default {
   components: {
-    "app-sidebar": Sidebar,
     editForm: editForm,
     deleteForm: deleteForm,
   },

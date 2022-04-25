@@ -8,10 +8,12 @@ import * as THREE from "three";
 
 class Resource {
   constructor(file) {
+    console.log("11", this);
     this.loader = new FBXLoader();
     this.obj = new Group();
-
+    console.log("22", this.edukit);
     this.edukit = {};
+    console.log("33", this.edukit);
     this.setResource(file);
   }
 
@@ -30,6 +32,7 @@ class Resource {
     } else if (file === "edukit") {
       this.loader.load("fbx/body.FBX", (object) => {
         let obj = (this.edukit.body = object);
+
         obj.name = "body";
 
         obj.scale.x = obj.scale.y = obj.scale.z = 0.0005;
@@ -47,6 +50,7 @@ class Resource {
       });
 
       this.loader.load("fbx/StaticMesh1.FBX", (object) => {
+        console.log(44, object);
         // 3호기 집게
         let obj = (this.edukit.staticMesh1 = object);
         obj.name = "StaticMesh1";

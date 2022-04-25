@@ -2,9 +2,6 @@
   <div>
     <div style="margin-bottom: 5px; width: 100%">
       <b-row>
-        <b-col cols="2">
-          <app-sidebar />
-        </b-col>
         <b-col>
           <b-row style="margin-top: 100px">
             <b-col style="text-align: right"> </b-col>
@@ -16,13 +13,7 @@
 </template>
 
 <script>
-import Sidebar from "../components/layout/Sidebar.vue";
-
-export default {
-  components: {
-    "app-sidebar": Sidebar,
-  },
-};
+export default {};
 </script>
 
 <style scoped>

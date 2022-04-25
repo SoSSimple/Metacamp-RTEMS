@@ -48,6 +48,11 @@ const routes = [
     component: () => import("../views/webgl/webgl.vue"),
   },
   {
+    path: "/webgl",
+    name: "webgl",
+    component: () => "http://192.168.43.208:1880/ui",
+  },
+  {
     path: "*",
     component: () => import("../components/NotFound.vue"),
   },
