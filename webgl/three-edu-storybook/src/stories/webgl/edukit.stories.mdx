@@ -1,0 +1,624 @@
+import { Meta, Story, Props } from '@storybook/addon-docs';
+import WebglExample from "./webglExample.vue";
+
+<Meta title='WebGL 예제/Edukit' component={ WebglExample }/>
+
+**디지털 트윈, 따라하기**
+---
+
+에듀킷은 교육용 키트로 실제 공장의 로직을 고스란히 담아 작게 공정을 만든 것 입니다.   
+웹 3D 기술을 기반으로 현실의 에듀킷과 실시간으로 상호 인터렉션되는, 디지털 트윈을 궁극적 목표로 합니다.   
+
+가상 에듀킷과 현실 에듀킷을 융합하게 되면 현실에서의 인터렉션이 가상에서도 동일하게 이뤄지고   
+가상에서의 인터렉션이 현실에서도 동일하게 작용되어 현실, 가상 간 트윈합니다.   
+
+공정 과정을 모니터 할뿐 아니라 모터의 현재 위치, 상황등을 모니터링 할 수 있습니다.
+
+**UVC Edukit 3호기**
+---
+
+  - 3호기 작동, 각 파트를 조작 해볼 수 있습니다.
+  - 실제 데이터 부분을 받아와 처리하는 부분은 포함되지 않았습니다.
+  - 데이터를 어떻게 가져올지, 어떻게 처리할지는 본인이 직접 설계해서 개발하셔야합니다.
+
+**목차**
+---
+
+1. (선행) 최종적으로 3호기 3D 모델이 그려질 HTML Element 만들기
+2. 3D 공간 만들기 & 3호기 3D 모델을 넣기
+3. 3D 공간에 눈과 손 추가하기   
+  3.1. 카메라 추가하기   
+  3.2. 조명 추가하기   
+  3.3. 컨트롤러 추가하기   
+4. 3호기 조작하기
+---
+
+**본문**
+---
+
+<h4>(선행) 최종적으로 3호기 3D 모델이 그려질 HTML Element 만들기</h4>
+
+저는 편의성을 위해 Three.js 부분을 Class로 만들어서 부품화하고 최종 조합된 파일을   
+import하고 이를 임시로 컴포넌트로 만든 후 부모 템플릿에 추가 할 계획입니다.
+
+```javascript
+/* webglExample.vue */
+
+<template>
+    <webgl-example></webgl-example>
+</template>
+
+<script>
+import Three from "./js/example"; // 모듈화된 Three.js 버전의 3호기를 불러온다.
+
+/**
+*   임시로 컴포넌트화
+*   실제 3D가 렌더링된 정보가 담겨있는 canvas를 넣을 공간으로 div 엘리먼트를 추가했다.
+*   해당 엘리먼트 정보를 import된 3호기 생성기에 넣는다.
+*/
+let WebglExample = {
+    template: '<div ref="webgl"></div>', 
+    mounted(){
+        Three(this.$refs.webgl);
+    }
+}
+
+export default {
+    name: "webgl-example",
+    components:{
+        WebglExample
+    }
+}
+</script>
+```
+
+<h4>3D 공간 만들기 & 3호기 3D 모델을 넣기</h4>
+
+3D 모델을 넣는 방법으로는 로컬에서 직접 파일을 추가하거나, 외부에서 다운받아 추가하는 방법이 있습니다.   
+문서에서는 직접 파일을 추가하고 불러와서 적용시키는 방법을 사용할 계획이지만   
+파일 다운로드 방식을 사용하셔도 전혀 무관합니다. 
+
+유비씨에서 제공하는 모델 파일은 fbx라는 확장자를 가집니다.   
+Three.js에서 제공하는 FBXLoader를 사용하면 간단하게 .fbx 파일을 렌더링할 수 있습니다.   
+`import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'`
+
+이후 로더에 파일url (Blob Url Type)을 인자로 넣어주면 해당 모델은 3D 렌더링을 준비가 완료된 것 입니다.
+```javascript
+let loader = new FBXLoader();
+
+loader.load(blobUrl, function(object){
+  if(object) console.log(object);
+});
+```
+
+혹은 로컬에 있는 파일을 활용할 수 있습니다. Edukit Three.js 프로젝트는 로컬에 있는 파일을 활용합니다.   
+현재 UVC에서 제공되는 3호기의 전체 모델 파일은 5개로 나뉘어집니다. 해당하는 파일을 FBXLoader를 통해 로드합니다.   
+
+`첫번째는 Edukit의 전체 몸체`   
+`두번째는 3호기의 전체 몸체`   
+`세번째는 3호기의 그랩`   
+`네번째는 3호기 그랩의 X축`   
+`다섯번째는 3호기의 Y축`   
+
+로드된 파일들은 Three.js의 Group로 하나의 Object3D로 묶습니다.   
+참고로 제공되는 3D 파일은 좌표계가 WebGL과 다른 Unity에서 작업되어 Export된 파일이기 때문에 임의적으로 회전해주는 작업이 필요합니다.   
+그리하여 소스코드에 나와있는 스케일은 사이즈 조절, 위치와 회전은 임의의 위치 및 각도 조절 작업을 했구나하고 이해해주시면 됩니다.   
+
+```javascript
+/* js/assets/resource.js */
+
+let loader = new FBXLoader();
+let objEdukit = new THREE.Group();
+
+loader.load("fbx/body.FBX", (object) => { // Edukit 전체 Body
+  let obj = this.edukit.body = object;
+  obj.name = "body";
+
+  obj.scale.x = obj.scale.y = obj.scale.z = .0005;
+
+  obj.position.x -= 15;
+
+  obj.traverse(function(child){
+      if(child.isMesh){
+          child.castShadow = true;
+          child.receiveShadow = true;
+      }
+  });
+
+  if(obj) objEdukit.add(obj);
+});
+```
+
+```javascript
+/* js/assets/resource.js */
+
+let loader = new FBXLoader();
+let objEdukit = new THREE.Group();
+
+loader.load("fbx/StaticMesh1.FBX", (object) => { // 3호기 집게
+  let obj = this.edukit.staticMesh1  = object;
+  obj.name = "StaticMesh1";
+
+  obj.scale.x = obj.scale.y = obj.scale.z = .5;
+
+  obj.position.x = 10;
+  obj.position.y = .5;
+  obj.position.z = 2.6;
+
+  obj.rotation.x = -90 * ( Math.PI / 180 ); 
+  obj.rotation.z = -160 * ( Math.PI / 180 ); 
+
+  obj.traverse(function(child){
+      if(child.isMesh){
+          child.castShadow = true;
+          child.receiveShadow = true;
+      }
+  });
+
+  if(obj) objEdukit.add(obj);
+});
+```
+
+```javascript
+/* js/assets/resource.js */
+
+let loader = new FBXLoader();
+let objEdukit = new THREE.Group();
+
+loader.load("fbx/StaticMesh2.FBX", (object) => { // 3호기 집게 축
+  let obj = this.edukit.staticMesh2 = object;
+  obj.name = "StaticMesh2";
+
+  obj.scale.x = obj.scale.y = obj.scale.z = .5;
+
+  obj.position.x = 6.7;
+  obj.position.y = -1.3;
+  obj.position.z = 2.8;
+
+  obj.rotation.x = -90 * ( Math.PI / 180 ); 
+  obj.rotation.z = -10 * ( Math.PI / 180 ); 
+
+  obj.traverse(function(child){
+      if(child.isMesh){
+          child.castShadow = true;
+          child.receiveShadow = true;
+      }
+  });
+
+  if(obj) objEdukit.add(obj);
+});
+```
+
+```javascript
+/* js/assets/resource.js */
+
+let loader = new FBXLoader();
+let objEdukit = new THREE.Group();
+
+loader.load("fbx/StaticMesh3.FBX", (object) => { // 3호기 Y축
+  let obj = this.edukit.staticMesh3 = object;
+  obj.name = "StaticMesh3";
+
+  obj.scale.x = obj.scale.y = obj.scale.z = .5;
+
+  obj.position.x = 5;
+  obj.position.z = 1.4;
+
+  obj.rotation.x = -90 * ( Math.PI / 180 ); 
+  obj.rotation.z = -170 * ( Math.PI / 180 ); 
+
+  obj.traverse(function(child){
+      if(child.isMesh){
+          child.castShadow = true;
+          child.receiveShadow = true;
+      }
+  });
+
+  if(obj) objEdukit.add(obj);
+});
+```
+
+```javascript
+/* js/assets/resource.js */
+
+let loader = new FBXLoader();
+let objEdukit = new THREE.Group();
+
+loader.load("fbx/StaticMesh4.FBX", (object) => { // 3호기 몸체
+  let obj = this.edukit.staticMesh4 = object;
+  obj.name = "StaticMesh4";
+
+  obj.scale.x = obj.scale.y = obj.scale.z = .5;
+
+  obj.position.x = 5;
+
+  obj.rotation.x = -90 * ( Math.PI / 180 ); 
+  obj.rotation.z = -170 * ( Math.PI / 180 ); 
+
+  obj.traverse(function(child){
+      if(child.isMesh){
+          child.castShadow = true;
+          child.receiveShadow = true;
+      }
+  });
+
+  if(obj) objEdukit.add(obj);
+});
+```
+
+<h5>카메라 추가하기</h5>
+
+그래픽한 3D 컨텐츠를 보려면 카메라가 설치되어야 합니다.   
+장면을 담기 위해서 그 방향을 바라보는 카메라를 설치한다고 생각하시면 됩니다.   
+
+```javascript
+/* js/assets/camera.js */
+
+/**
+ * Three.js의 카메라를 설정하는 파트입니다
+ */
+import { CinematicCamera } from "three/examples/jsm/cameras/CinematicCamera";
+
+class Camera{
+  constructor(){
+    this.camera = new CinematicCamera( 1000, 1, 1, 2000 );
+
+    this.setCamera();
+  }
+
+  setCamera(){
+    this.camera.position.set(10, 10, 10);
+  }
+
+  get cameraElement(){
+    return this.camera;
+  }
+}
+
+export { Camera };
+
+```
+
+<h5>조명 추가하기</h5>
+
+조명이 없다면 해당 장면은 칠흑같은 어둠입니다.   
+물체를 보기 위해서는 빛이 있어야 합니다.   
+
+```javascript
+/* js/assets/light.js */
+
+/**
+ * Three.js의 조명을 설정하는 파트입니다
+ */
+import { PointLight, AmbientLight, DirectionalLight } from "three";
+
+class Light{
+  constructor(){
+    this.ambientLight = new AmbientLight( 0x20202A, 7, 100 );
+    this.dirLight = new DirectionalLight(0xffffff, 1);
+
+    this.setLight();
+  }
+
+  setLight(){
+    this.dirLight.position.set( 0, 10, 20 );
+    this.dirLight.castShadow = true;
+  }
+
+  get lightElement(){
+    return this.dirLight;
+  }
+}
+
+export { Light };
+```
+
+<h5>컨트롤러 추가하기</h5>
+
+Three.js에서는 Three.js로 만들어낸 컨텐츠에 대한 `만들어진` 인터렉션을 제공합니다.   
+해당 컨트롤러는 기본적으로 마우스 좌클릭, 휠 줌인 등을 제공합니다.   
+
+```javascript
+/* js/assets/control.js */
+
+/**
+ * Three.js의 컨트롤러를 설정하는 파트입니다
+ */
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
+class Control{
+  constructor(camera, domElement){
+    this.controls = new OrbitControls(camera, domElement);
+
+    this.setControl();
+  }
+
+  setControl(){
+    this.controls.minDistance = 10;
+    this.controls.maxDistance = 50;
+    this.controls.target.set(0, 0, 0);
+    this.controls.enableDamping = true;
+  }
+
+  get controlElement(){
+    return this.controls;
+  }
+}
+
+export { Control };
+```
+
+<h5>렌더러 추가하기</h5>
+
+Three.js 방식의 3D 컨텐츠를 렌더링 할 Canvas Element를 생성함  
+
+```javascript
+/* js/assets/renderer.js */
+
+/**
+ * Three.js의 렌더링을 설정하는 파트입니다
+ */
+import { WebGLRenderer } from "three";
+
+class Renderer{
+  constructor(element){
+    this.renderer = new WebGLRenderer({ antialias: true, alpha: true });
+
+    this.setRenderer(element);
+  }
+
+  setRenderer(element){
+    this.renderer.setPixelRatio(1);
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.setSize(element.clientWidth || 500, element.clientHeight || 500);
+
+    element.appendChild(this.renderer.domElement);
+  }
+
+  get domElement(){
+    return this.renderer.domElement;
+  }
+
+  get rendererElement(){
+    return this.renderer;
+  }
+}
+
+export { Renderer };
+```
+
+<h5>렌더링 작업 추가하기</h5>
+
+지속적인 렌더링 작업을 위함   
+
+```javascript
+/* js/assets/render.js */
+
+/**
+ * Three.js의 렌더링을 실행하는 파트입니다.
+ */
+
+class Render{
+  constructor(){
+    this.status = true;
+  }
+
+  start(){
+    this.status = window.requestAnimationFrame(() => {
+      this.renderer.render(this.scene, this.camera);
+      this.controls.update();
+      if(this.edukit && Object.keys(this.edukit).length === 7){
+        let yAxis = parseFloat(this.edukit.staticMesh1.position.y.toFixed(1));
+        let nowyAxisMoterValue = this.normalization(8, 0.5, this.edukit.yAxis, 1).toFixed(1);
+        if(yAxis < nowyAxisMoterValue){
+          this.edukit.staticMesh1.position.y += .05;
+          this.edukit.staticMesh2.position.y += .05;
+          this.edukit.staticMesh3.position.y += .05;  
+        } else if(yAxis > nowyAxisMoterValue) {
+          this.edukit.staticMesh1.position.y -= .05;
+          this.edukit.staticMesh2.position.y -= .05;
+          this.edukit.staticMesh3.position.y -= .05;
+        }
+
+        let xAxis = parseFloat(this.edukit.staticMesh1.position.x.toFixed(1));
+        let nowxAxisMoterValue = this.normalization(5, 10, this.edukit.xAxis, 2).toFixed(1);
+        if(xAxis > nowxAxisMoterValue){
+          this.edukit.staticMesh1.position.x -= .015;
+          this.edukit.staticMesh2.rotation.z -= .0048;
+          this.edukit.staticMesh2.position.x -= .0055;
+          this.edukit.staticMesh2.position.z += .0050;
+        } else if (xAxis < nowxAxisMoterValue){
+          this.edukit.staticMesh1.position.x += .015;
+          this.edukit.staticMesh2.rotation.z += .0048;
+          this.edukit.staticMesh2.position.x += .0055;
+          this.edukit.staticMesh2.position.z -= .0050;
+        }
+
+        let zAxis = parseFloat(this.edukit.staticMesh1.position.z.toFixed(1));
+        let nowzAxisMoterValue = this.normalization(8, 2.6, this.edukit.xAxis, 2).toFixed(1);
+        if(zAxis < nowzAxisMoterValue){
+          this.edukit.staticMesh1.position.z += .017;
+        } else if (zAxis > nowzAxisMoterValue){
+          this.edukit.staticMesh1.position.z -= .017;
+        }
+      }
+      this.start();
+    });
+  }
+
+  stop(){
+    window.cancelAnimationFrame(this.status);
+  }
+
+  status(value){
+    this.status = value;
+  }
+
+  normalization(max, min, value, moterNumber){
+    const MAX_MOTER1 = 1301828; // yAxis Moter
+    const MIN_MOTER1 = -27;
+    const MAX_MOTER2 = 25021563; // xAxis Moter
+    const MIN_MOTER2 = -4375;
+    return moterNumber === 1 ? (max - min)  * (value + MIN_MOTER1) / (MAX_MOTER1 + MIN_MOTER1) + min:
+                                (max - min)  * (value + MIN_MOTER2) / (MAX_MOTER2 + MIN_MOTER2) + min
+  }
+}
+ 
+ export { Render };
+```
+
+<h4>3호기 조작하기</h4>
+
+본 결과물에서는 dat.gui를 통해 직접적으로 3호기 모터를 조작하거나   
+Edukit과 연결되어 송출되는 MQTT 데이터를 송신받아 처리하는 방식으로 3호기를 조작합니다.   
+
+<h5>dat.GUI로 조작하기</h5>
+
+dat.gui를 제어하는 클래스를 만들어서 데이터 처리를 연결합니다.   
+
+```javascript
+/* js/plugins/gui.js */
+class Gui{
+  constructor(element){
+    this.gui = new dat.GUI({autoPlace: false});
+    this.gui.domElement.style.position = "relative";
+    this.gui.domElement.style.flex = "none";
+    element.style.display = "inline-flex";
+
+    element.appendChild(this.gui.domElement);
+  }
+
+  addOptions(options){
+    this.options = options;
+  }
+
+  addFolder(name){
+    this.guiFolder = this.gui.addFolder(name);
+  }
+
+  addExample(name, min, max, axisNumber){
+    this.guiFolder.add(this.options, name, min, max)
+    .onChange(() => {
+      axisNumber[name] = this.options[name];
+    })
+  }
+}
+
+export { Gui };
+```
+
+메인 프레임에서 dat.GUI에 gui 컨트롤러를 설정합니다.   
+
+```javascript
+// Dat.GUI Setting
+  let gui = new Gui(element);
+  let options = {
+    "yAxis": -27,
+    "xAxis": -4375,
+  }
+  gui.addOptions(options);
+  gui.addFolder("Example");
+
+  gui.addExample("yAxis", -27, 1301828, scene.resource.edukit);
+  gui.addExample("xAxis", -4375, 25021563, scene.resource.edukit);
+```
+
+<h5>MQTT로 조작하기</h5>
+
+실제 Edukit 3호기 데이터를 엣지 서버를 활용하여 MQTT로 실시간 output 되고 있습니다.   
+데이터가 전송되고 있는 해당 MQTT 브로커의 토픽에 접근하여 메시지 송신에 대한 이벤트 처리를 해줍니다.   
+
+```javascript
+/* js/assets/event.js */
+
+/**
+ * 목표 기기의 실시간 정보를 연결하는 파트입니다
+ * 방식은 자유지만 본 프로젝트에서는 mqtt를 사용함
+ */
+import mqtt from "mqtt";
+
+class Event{
+  constructor(element, edukit){
+    const eventElement = document.createElement("div");
+
+    const inputAddressElement = eventElement.appendChild(document.createElement("input"));
+    inputAddressElement.placeholder = "MQTT Host 입력";
+
+    const inputPortElement = eventElement.appendChild(document.createElement("input"));
+    inputPortElement.placeholder = "MQTT Port 입력";
+
+    const inputPathElement = eventElement.appendChild(document.createElement("input"));
+    inputPathElement.placeholder = "MQTT Path 입력";
+
+    const inputTopicElement = eventElement.appendChild(document.createElement("input"));
+    inputTopicElement.placeholder = "MQTT Topic 입력";
+
+    const buttonElement = eventElement.appendChild(document.createElement("button"));
+    buttonElement.innerText = "Connect"
+
+    const statusElement = eventElement.appendChild(document.createElement("span"));
+    statusElement.innerText = "연결";
+    statusElement.style.color = "red";
+
+    buttonElement.addEventListener("click", () => {
+      let props = {
+          hostname: inputAddressElement.value,
+          port: inputPortElement.value,
+          path: inputPathElement.value,
+          topic: inputTopicElement.value,
+          status: statusElement.style,
+          edukit: edukit
+      }
+      statusElement.style.color = "red";
+      if(this.client) this.client.end();
+
+      this.setEvent(props);
+    });
+
+    element.appendChild(eventElement);
+  }
+
+  setEvent(props){
+    let { hostname, port, path, topic, status, edukit } = props;
+
+    const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
+    this.client = mqtt.connect({
+      clientId,
+      clean: true,
+      protocol: "ws",
+      reconnectPeriod: 1000,
+      hostname: hostname,
+      port: port,
+      path: path,
+    });
+
+    this.client.on('connect', () => {
+      console.log("MQTT Connected");
+      status.color = "green";
+      
+      this.client.subscribe([topic], () => {
+        console.log(`토픽 연결 완료: ${topic}`);
+      });
+      this.client.on('message', (topic, payload) => {
+        console.log(`토픽 ${topic}에서 전송된 메시지: ${payload.toString()}`);
+
+        let message = JSON.parse(payload);
+        let data = message.Wrapper.filter((p) => p.tagId === "21" || p.tagId === "22");
+        data = data.map((p) => parseInt(p.value));
+
+        edukit["yAxis"] = data[0];
+        edukit["xAxis"] = data[1];
+      });
+    });
+    }
+}
+
+export { Event };
+```
+
+<Story name='Edukit 3호기'>
+  {{
+    components:{ WebglExample },
+    template: '<WebglExample></WebglExample>',
+  }}
+</Story>

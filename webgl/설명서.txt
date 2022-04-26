@@ -1,0 +1,7 @@
+three-edu는 3호기 트윈에 대한 vue 프로젝트입니다.
+three-edu-storybook은 3호기 트윈+three.js 예제에 대한 vue 프로젝트를 storybook으로 변환
+
+three-edu는 npm run serve나 yarn serve로 실행하고
+three-edu-storybook은 npm run storybook나 yarn storybook으로 실행합니다.
+
+본 프로젝트는 node v14.17.5에서 진행되었습니다.
