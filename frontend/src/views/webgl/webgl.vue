@@ -27,8 +27,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-left: 200px;
-  margin-top: 150px;
 }
 
 #app div :nth-child(3) {
@@ -37,9 +35,24 @@ export default {
 #app div > :nth-child(3) input {
   margin-right: 10px;
 }
+.close-button {
+  display: none !important;
+}
+.dg {
+  position: absolute !important;
+  width: 300px !important;
+  top: 350px;
+  left: 50px;
+}
+.dg ul {
+  border-radius: 5px !important;
+}
+.dg li {
+  height: 250px;
+}
 .dg li.title {
   cursor: pointer;
-  margin-left: 2px;
+  display: none;
 }
 
 .dg input {
@@ -55,9 +68,25 @@ export default {
 .c div input {
   margin: 0px;
   text-align: center;
+  padding: 12px !important;
+  font-size: 25px !important;
 }
 .dg li.folder {
   padding: 0;
-  border-left: 0px solid rgba(0, 0, 0, 0);
+  border-left: 0px solid #1b1b1b;
+}
+
+.cr {
+  height: 50px !important;
+  padding: 0px !important;
+}
+
+.property-name {
+  padding: 12px;
+  text-align: center;
+  font-size: 23px;
+}
+.slider {
+  display: none !important;
 }
 </style>

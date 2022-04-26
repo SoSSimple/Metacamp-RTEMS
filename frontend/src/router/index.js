@@ -48,6 +48,11 @@ const routes = [
     component: () => import("../views/webgl/webgl.vue"),
   },
   {
+    path: "/mypage",
+    name: "mypage",
+    component: () => import("../views/mypage.vue"),
+  },
+  {
     path: "*",
     component: () => import("../components/NotFound.vue"),
   },

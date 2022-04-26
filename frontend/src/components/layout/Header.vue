@@ -21,7 +21,7 @@
             <li @click="$router.push('/result')">작업결과</li>
           </ul>
         </li>
-        <li><a href="#">MyPage</a></li>
+        <li class="mypage" @click="$router.push('/mypage')">MyPage</li>
         <li @click="onClickLogout"><a href="#">Logout</a></li>
       </ul>
     </nav>
@@ -120,7 +120,7 @@ nav ul li:hover > ul {
 nav ul ul li {
   position: relative;
   margin: 0px;
-  width: 150px;
+  width: 115px;
   float: none;
   display: list-item;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
@@ -151,6 +151,19 @@ input {
 .fa-plus {
   font-size: 15px;
   margin-left: 40px;
+}
+.mypage {
+  color: white;
+  line-height: 40px;
+  text-decoration: none;
+  font-size: 18px;
+  margin: 15px 0px;
+  padding: 0px 12px;
+}
+.mypage:hover {
+  color: cyan;
+  border-radius: 5px;
+  box-shadow: 0 0 5px #33ffff, 0 0 10px #66ffff;
 }
 @media all and (max-width: 968px) {
   nav ul {

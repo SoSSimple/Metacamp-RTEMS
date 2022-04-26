@@ -11,11 +11,8 @@ import { Render } from "./assets/render";
 import { Gui } from "./plugins/gui";
 
 export default async (element) => {
-  element.style.width = "margin: 100px";
-  element.style.width = "70vw";
-  element.style.height = "60vh";
-  element.style.flexDirection = "column-reverse";
-  element.style.justifyContent = "center";
+  element.style.height = "100vh";
+  element.style.width = "100vw";
 
   // Scene Setting
   let scene = new Scene("edukit");

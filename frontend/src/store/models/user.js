@@ -57,13 +57,20 @@ export default {
     },
 
     actSignup(context, payload) {
-      axios.post("http://localhost:8080/users/signup", {
-        userId: payload.userId,
-        password: payload.password,
-        name: payload.name,
-        role: payload.role,
-        department: payload.department,
-      });
+      axios
+        .post("http://localhost:8080/users/signup", {
+          userId: payload.userId,
+          password: payload.password,
+          name: payload.name,
+          role: payload.role,
+          department: payload.department,
+        })
+        .then((resposne) => {
+          alert("회원가입성공");
+        })
+        .catch((err) => {
+          alert("중복된 계정입니다");
+        });
     },
 
     async actUserList(context) {

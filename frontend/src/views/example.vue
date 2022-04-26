@@ -16,8 +16,4 @@
 export default {};
 </script>
 
-<style scoped>
-.col {
-  margin-top: 20px;
-}
-</style>
+<style scoped></style>
