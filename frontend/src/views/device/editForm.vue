@@ -5,24 +5,20 @@
       title="준비상태 바꾸기"
       @ok="onSubmit"
     >
-      <template #modal-title> 운영상태 바꾸기</template>
-      <p>장비명과 준비상태를 선택하시오.</p>
-      <b-form-group>
-        <b-form-select v-model="selectedDevice">
-          <option v-for="(o, idx) in deviceList" v-bind:key="idx">
-            {{ o.deviceName }}
-          </option>
-        </b-form-select>
-      </b-form-group>
-      <b-form-group v-slot="{ ariaDescribedby }">
+      <div>
+        <p>장비명과 준비상태를 선택하시오.</p>
+        <b-form-group>
+          <div>
+            {{ deviceData.deviceName }}
+          </div>
+        </b-form-group>
         <b-form-radio-group
           id="radio-group-1"
-          v-model="selectedReady"
+          v-model="deviceData.readyState"
           :options="options"
-          :aria-describedby="ariaDescribedby"
           name="radio-options"
         ></b-form-radio-group>
-      </b-form-group>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -33,41 +29,29 @@ export default {
     return {
       returnSelected: null,
       options: [
-        { text: "On", value: "on" },
-        { text: "Off", value: "off" },
+        { text: "On", value: "true" },
+        { text: "Off", value: "false" },
       ],
-      selectedReady: false,
-      selectedDevice: false,
     };
   },
-  computed: {
-    deviceList() {
-      return this.$store.getters.DeviceList;
+  props: {
+    deviceData: {
+      type: Object,
+      required: true,
+      default: null,
     },
   },
-  created() {
-    this.searchDeviceList();
-  },
+
   methods: {
-    searchDeviceList() {
-      this.$store.dispatch("actDeviceList");
-    },
     onSubmit() {
-      if (this.selectedReady == "on") {
-        this.returnSelected = true;
-        const payload = {
-          readyState: this.returnSelected,
-          deviceName: this.selectedDevice,
-        };
-        this.$store.dispatch("actDeviceReady", payload);
-      } else {
-        this.returnSelected = false;
-        const payload = {
-          readyState: this.returnSelected,
-          deviceName: this.selectedDevice,
-        };
-        this.$store.dispatch("actDeviceReady", payload);
-      }
+      const payload = {
+        id: this.deviceData.id,
+        deviceName: this.deviceData.deviceName,
+        operatingState: this.deviceData.operatingState,
+        readyState: this.deviceData.readyState,
+        startedAt: this.deviceData.startedAt,
+      };
+      this.$store.dispatch("actDeviceReady", payload);
     },
   },
 };

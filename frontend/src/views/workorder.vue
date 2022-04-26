@@ -2,79 +2,53 @@
   <div>
     <div style="margin-bottom: 5px; width: 100%">
       <b-row>
-        <b-col>
-          <div>
-            <h2>모든 장비 목록 {{ mqttData }}</h2>
-            <b-table small hover striped :items="deviceList" :fields="fields">
-              <template #cell(updatedBtn)="row">
-                <b-button
-                  size="sm"
-                  variant="outline-primary"
-                  @click="onClickEdit(row.item.id)"
-                  >수정</b-button
-                >
-              </template>
-              <template #cell(completedBtn)="row">
-                <b-button
-                  size="sm"
-                  variant="success"
-                  @click="onClickComplete(row.item.id)"
-                  >완료</b-button
-                >
-              </template>
-              <template #cell(pausedBtn)="row">
-                <b-button
-                  size="sm"
-                  variant="danger"
-                  @click="onClickPause(row.item.id)"
-                  >정지</b-button
-                >
-              </template>
-            </b-table>
-          </div>
-          <br />
-          <div>
-            <hr />
-            <h2>장비 사용 기록</h2>
-            <br />
-            <div>
-              <h4>Edge-1 기록</h4>
-              <b-table
-                small
-                hover
-                striped
-                :items="edgeOneLogList"
-                :fields="edgeFields"
+        <div>
+          <b-col>
+            <div class="table_header">
+              <h1>작업지시서</h1>
+            </div>
+            <div class="button-wrapper">
+              <button size="sm" variant="success" @click="onClickEdit(device)">
+                가동
+              </button>
+              <button
+                size="sm"
+                variant="success"
+                @click="onClickComplete(device)"
               >
-              </b-table>
+                완료
+              </button>
+              <button size="sm" variant="danger" @click="onClickDelete(user)">
+                비상정지
+              </button>
             </div>
             <div>
-              <h4>Edge-2 기록</h4>
-              <b-table
-                small
-                hover
-                striped
-                :items="edgeTwoLogList"
-                :fields="edgeFields"
-              >
-              </b-table>
+              <div class="table_section">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>장비명</th>
+                      <th>준비상태</th>
+                      <th>동작상태</th>
+                      <th>가동시작시간</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="device in deviceList" :key="device">
+                      <td>{{ device.deviceName }}</td>
+                      <td>{{ device.readyState }}</td>
+                      <td>{{ device.operatingState }}</td>
+                      <td>{{ device.startedAt }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div>
-              <h4>Edge-3 기록</h4>
-              <b-table
-                small
-                hover
-                striped
-                :items="edgeThreeLogList"
-                :fields="edgeFields"
-              >
-              </b-table>
-            </div>
-          </div>
-        </b-col>
+          </b-col>
+        </div>
       </b-row>
     </div>
-    <inform />
+    <OrderInform />
   </div>
 </template>
 
@@ -84,7 +58,7 @@ import mqtt from "mqtt";
 
 export default {
   components: {
-    inform: OrderInform,
+    OrderInform: OrderInform,
   },
   data() {
     return {
@@ -93,31 +67,9 @@ export default {
         qos: 0,
       },
       mqttData: "",
-      qosList: [
-        { label: 0, value: 0 },
-        { label: 1, value: 1 },
-        { label: 2, value: 2 },
-      ],
       client: {
         connected: false,
       },
-      subscribeSuccess: false,
-
-      fields: [
-        { key: "deviceName", label: "장비명" },
-        { key: "readyState", label: "준비 상태" },
-        { key: "operatingState", label: "가동 상태" },
-        { key: "startedAt", label: "가동 시작 시간" },
-        { key: "updatedBtn", label: "가동" },
-        { key: "completedBtn", label: "완료" },
-        { key: "pausedBtn", label: "비상정지" },
-      ],
-      edgeFields: [
-        { key: "name", label: "작업자 이름" },
-        { key: "userId", label: "작업자 아이디" },
-        { key: "department", label: "부서" },
-        { key: "role", label: "권한" },
-      ],
     };
   },
   computed: {
@@ -144,13 +96,6 @@ export default {
 
   methods: {
     createConnection() {
-      // Connect string, and specify the connection method used through protocol
-      // ws unencrypted WebSocket connection
-      // wss encrypted WebSocket connection
-      // mqtt unencrypted TCP connection
-      // mqtts encrypted TCP connection
-      // wxs WeChat mini app connection
-      // alis Alipay mini app connection
       const connectUrl = process.env.VUE_APP_MQTT;
 
       console.log(connectUrl);
@@ -201,3 +146,163 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+}
+
+.table_header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 20px;
+  background-color: rgb(240, 240, 240);
+}
+
+.table_header p {
+  color: #000000;
+}
+
+button {
+  outline: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px;
+  color: #ffffff;
+}
+
+td button:nth-child(1) {
+  background-color: #1b1b1b;
+}
+
+td button:nth-child(2) {
+  background-color: #f80000;
+}
+
+.add_new {
+  padding: 10px 20px;
+  color: #ffffff;
+  background-color: #1b1b1b;
+}
+
+input {
+  padding: 10px 20px;
+  margin: 0 10px;
+  outline: none;
+  border: 1px solid #1b1b1b;
+  border-radius: 6px;
+  color: #1b1b1b;
+}
+
+.table_section {
+  height: 500px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  table-layout: fixed;
+  min-width: 900px;
+  border-collapse: collapse;
+}
+
+thead th {
+  position: sticky;
+  top: 0;
+  background-color: #f6f9fc;
+  color: #8493a5;
+  font-size: 15px;
+}
+
+th,
+td {
+  border-bottom: 1px solid #dddddd;
+  padding: 10px 20px;
+  word-break: break-all;
+  text-align: center;
+}
+
+td img {
+  height: 60px;
+  width: 60px;
+  object-fit: cover;
+  border-radius: 15px;
+  border: 5px solid #ced0d2;
+}
+
+tr:hover td {
+  color: #1b1b1b;
+  cursor: pointer;
+  background-color: #f6f9fc;
+}
+
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  padding: 10px 20px;
+}
+
+.pagination div {
+  padding: 10px;
+  border: 2px solid #d5d0d0;
+  height: 40px;
+  width: 40px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1b1b1b;
+  color: #ffffff;
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.75);
+  margin: 0 5px;
+  cursor: pointer;
+}
+
+::placeholder {
+  color: #1b1b1b;
+}
+
+::-webkit-scrollbar {
+  height: 5px;
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+::-webkit-scrollbar-thumb {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.button-wrapper {
+  display: flex;
+  justify-content: right;
+}
+.button-wrapper button {
+  margin: 0px 20px;
+  outline: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 10px;
+  background-color: #1b1b1b;
+}
+</style>

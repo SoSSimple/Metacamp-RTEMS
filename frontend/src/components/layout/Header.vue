@@ -7,7 +7,7 @@
       </label>
       <input type="checkbox" id="btn" />
       <ul>
-        <li><a href="#">Home</a></li>
+        <li><a href="http://192.168.43.208:1880/ui">NODE RED</a></li>
         <li>
           <label for="btn-1" class="show">Features +</label>
           <a href="#">Features</a>
@@ -15,14 +15,13 @@
           <ul class="nav-detail">
             <li @click="$router.push('/webgl')">디지털트윈</li>
             <li @click="$router.push('/dashboard')">대시보드</li>
-            <li @click="$router.push('/nodered')">NODE-RED</li>
             <li @click="$router.push('/user')">사용자 관리</li>
             <li @click="$router.push('/device')">장비 관리</li>
             <li @click="$router.push('/workorder')">작업지시서</li>
             <li @click="$router.push('/result')">작업결과</li>
           </ul>
         </li>
-        <li><a href="#">myPage</a></li>
+        <li><a href="#">MyPage</a></li>
         <li @click="onClickLogout"><a href="#">Logout</a></li>
       </ul>
     </nav>
@@ -70,6 +69,8 @@ nav .logo {
   padding-left: 60px;
 }
 nav ul {
+  z-index: 100;
+
   float: right;
   margin-right: 40px;
   list-style: none;
@@ -133,6 +134,9 @@ nav ul ul ul li {
 .nav-detail {
   color: white;
   text-align: center;
+}
+.nav-detail li {
+  margin-bottom: 1px;
 }
 .nav-detail li:hover {
   color: cyan;
