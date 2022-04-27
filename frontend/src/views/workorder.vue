@@ -18,7 +18,7 @@
               >
                 완료
               </button>
-              <button size="sm" variant="danger" @click="onClickDelete(user)">
+              <button size="sm" variant="danger" @click="onClickPause(user)">
                 비상정지
               </button>
             </div>
