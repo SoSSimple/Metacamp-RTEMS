@@ -69,7 +69,7 @@ export default {
           alert("회원가입성공");
         })
         .catch((err) => {
-          alert("중복된 계정입니다");
+          alert("사용이 불가능한 아이디 입니다");
         });
     },
 

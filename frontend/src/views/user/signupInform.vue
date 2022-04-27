@@ -77,13 +77,13 @@
 export default {
   data() {
     return {
-      userId: null,
-      password: null,
-      checkPassword: null,
-      name: null,
+      userId: "",
+      password: "",
+      checkPassword: "",
+      name: "",
       allPassed: false,
-      selectedRole: null,
-      selectedDepartment: null,
+      selectedRole: "",
+      selectedDepartment: "",
       idValidation: "",
       passwordValidation: "",
       showPasswordNotEquelValidation: "",
@@ -163,11 +163,26 @@ export default {
         department: this.selectedDepartment,
       };
 
+      if (this.userId.length < 1) {
+        return alert("공란을 채워주세요");
+      }
+      if (this.password.length < 1) {
+        return alert("공란을 채워주세요");
+      }
+      if (this.name.length < 1) {
+        return alert("공란을 채워주세요");
+      }
+
+      if (this.selectedRole.length < 1) {
+        return alert("WORKER 또는 ADMIN을 선택해주세요");
+      }
+      if (this.selectedDepartment.length < 1) {
+        return alert("sales 또는 dev를 선택해주세요");
+      }
+
       if (this.allPassed) {
         return this.$store.dispatch("actSignup", payload);
       }
-
-      return alert("공란을 채워주세요");
     },
   },
 };
