@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "d3juCr2fj2ZUVNSmahGnFZHl762gw+Gs2Q5D0sLA8u7QqXmVVXtnXDt30YAyJS6bo/FTbbitmgujZWZpSBVUPA==",
+  "dgSpecHash": "p+jB6Q2OY38OW3GgXqJAnCI9Ny2I3872XXOpnVz4+gwBTi/Gj4OT7wm/nxxQT2TxCvzULMVVn9puOXGkk3I8BA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\user\\Desktop\\MetaCamp\\FlexingEdukit\\SmartConnector\\SmartConnector.csproj",
+  "projectFilePath": "C:\\Users\\user\\Desktop\\Metacamp-RTEMS\\SmartConnector\\SmartConnector.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\ecng.collections\\1.0.95\\ecng.collections.1.0.95.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\ecng.common\\1.0.92\\ecng.common.1.0.92.nupkg.sha512",

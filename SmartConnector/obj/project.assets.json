@@ -5166,11 +5166,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\user\\Desktop\\MetaCamp\\FlexingEdukit\\SmartConnector\\SmartConnector.csproj",
+      "projectUniqueName": "C:\\Users\\user\\Desktop\\Metacamp-RTEMS\\SmartConnector\\SmartConnector.csproj",
       "projectName": "SmartConnector",
-      "projectPath": "C:\\Users\\user\\Desktop\\MetaCamp\\FlexingEdukit\\SmartConnector\\SmartConnector.csproj",
+      "projectPath": "C:\\Users\\user\\Desktop\\Metacamp-RTEMS\\SmartConnector\\SmartConnector.csproj",
       "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\user\\Desktop\\MetaCamp\\FlexingEdukit\\SmartConnector\\obj\\",
+      "outputPath": "C:\\Users\\user\\Desktop\\Metacamp-RTEMS\\SmartConnector\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
