@@ -7,7 +7,11 @@
             placeholder="아이디 입력"
             v-model="userId"
             required
+            @keyup="validationCheck"
           ></b-form-input>
+          <p class="show-id-error">
+            {{ this.showIdError }}
+          </p>
         </b-form-group>
         <b-form-group>
           <b-form-input
@@ -22,7 +26,14 @@
             placeholder="패스워드 입력"
             v-model="password"
             required
+            @keyup="validationCheck"
           ></b-form-input>
+          <p class="show-password-error1">
+            {{ this.showPasswordError }}
+          </p>
+          <p class="show-password-confirm-error1">
+            {{ this.showPasswordNotEquelError }}
+          </p>
         </b-form-group>
         <b-form-group>
           <b-form-input
@@ -30,7 +41,14 @@
             placeholder="패스워드 확인"
             v-model="checkPassword"
             required
+            @keyup="validationCheck"
           ></b-form-input>
+          <p class="show-password-error2">
+            {{ this.showPasswordError }}
+          </p>
+          <p class="show-password-confirm-error2">
+            {{ this.showPasswordNotEquelError }}
+          </p>
         </b-form-group>
         <b-form-group v-slot="{ ariaDescribedby }">
           <b-form-radio-group
@@ -56,15 +74,34 @@
 </template>
 
 <script>
+const showAlert = (error) => {
+  alert(error);
+};
+
+const showUserValidationError = (showCssChange) => {
+  showCssChange.style.display = "flex";
+};
+
+const hideUserValidationError = (showCssChange) => {
+  showCssChange.style.display = "none";
+};
 export default {
   data() {
     return {
-      userId: null,
-      password: null,
-      checkPassword: null,
-      name: null,
-      selectedRole: null,
-      selectedDepartment: null,
+      userId: "",
+      password: "",
+      checkPassword: "",
+      name: "",
+      allPassed: false,
+      selectedRole: "",
+      selectedDepartment: "",
+      idValidation: "",
+      passwordValidation: "",
+      showPasswordNotEquelValidation: "",
+      showIdError: "6~20 영문 혹은 영문+숫자만 가능합니다",
+      showPasswordError: "8~15 영문+숫자만 가능합니다",
+      showPasswordNotEquelError: "비밀번호와 비밀번호 확인은 같아야 합니다",
+      validationChecked: "false",
       optionsRole: [
         { text: "WORKER", value: "worker" },
         { text: "ADMIN", value: "admin" },
@@ -77,32 +114,59 @@ export default {
   },
   watch: {},
   methods: {
+    validationCheck() {
+      const idValidation = /^[a-z]+[a-z0-9]{5,19}$/g; // 영문자로 시작하는 영문자 또는 숫자 6~20자
+      const passwordValidation = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,14}$/; //8 ~ 15자 영문, 숫자 조합
+
+      const showIdError = document.querySelector(".show-id-error");
+      const showPasswordError1 = document.querySelector(
+        ".show-password-error1"
+      );
+      const showPasswordError2 = document.querySelector(
+        ".show-password-error2"
+      );
+      const showPasswordConfirmError1 = document.querySelector(
+        ".show-password-confirm-error1"
+      );
+      const showPasswordConfirmError2 = document.querySelector(
+        ".show-password-confirm-error2"
+      );
+
+      if (!idValidation.test(this.userId)) {
+        showUserValidationError(showIdError);
+      } else {
+        hideUserValidationError(showIdError);
+      }
+
+      if (!passwordValidation.test(this.password)) {
+        showUserValidationError(showPasswordError1);
+      } else {
+        hideUserValidationError(showPasswordError1);
+      }
+
+      if (!passwordValidation.test(this.password)) {
+        showUserValidationError(showPasswordError2);
+      } else {
+        hideUserValidationError(showPasswordError2);
+      }
+
+      if (!passwordValidation.test(this.checkPassword)) {
+        showUserValidationError(showPasswordConfirmError1);
+      } else {
+        hideUserValidationError(showPasswordConfirmError1);
+      }
+
+      if (this.password !== this.checkPassword) {
+        showUserValidationError(showPasswordConfirmError1);
+        showUserValidationError(showPasswordConfirmError2);
+      } else {
+        hideUserValidationError(showPasswordConfirmError1);
+        hideUserValidationError(showPasswordConfirmError2);
+      }
+      this.allPassed = true;
+    },
+
     onSubmit() {
-      if (
-        !this.name ||
-        !this.userId ||
-        !this.password ||
-        !this.checkPassword ||
-        !this.selectedRole ||
-        !this.selectedDepartment
-      ) {
-        this.userId = "";
-        this.name = "";
-        this.password = "";
-        this.checkPassword = "";
-        this.selectedRole = null;
-        this.selectedDepartment = null;
-        alert("모든 내용은 필수로 입력해야 합니다.");
-      }
-      if (this.password != this.checkPassword) {
-        this.userId = "";
-        this.name = "";
-        this.password = "";
-        this.checkPassword = "";
-        this.selectedRole = null;
-        this.selectedDepartment = null;
-        alert("비밀번호가 맞지 않습니다. 가입이 실패되었습니다.");
-      }
       const payload = {
         userId: this.userId,
         password: this.password,
@@ -110,18 +174,54 @@ export default {
         role: this.selectedRole,
         department: this.selectedDepartment,
       };
-      this.userId = "";
-      this.name = "";
-      this.password = "";
-      this.checkPassword = "";
-      this.selectedRole = null;
-      this.selectedDepartment = null;
-      alert("회원가입에 성공했습니다!!");
 
-      this.$store.dispatch("actSignup", payload);
+      if (this.userId.length < 1) {
+        return showAlert("공란을 채워주세요");
+      }
+
+      console.log(this.userId.length);
+      if (this.userId.length > 20) {
+        return showAlert("아이디를 20글자 이하로 입력해주세요");
+      }
+
+      if (this.password.length < 1) {
+        return showAlert("공란을 채워주세요");
+      }
+
+      if (this.password.length > 15) {
+        return showAlert("비밀번호를 15글자 이하로 입력해주세요");
+      }
+
+      if (this.name.length < 1) {
+        return showAlert("공란을 채워주세요");
+      }
+
+      if (this.selectedRole.length < 1) {
+        return showAlert("WORKER 또는 ADMIN을 선택해주세요");
+      }
+
+      if (this.selectedDepartment.length < 1) {
+        return showAlert("sales 또는 dev를 선택해주세요");
+      }
+
+      if (this.allPassed) {
+        return this.$store.dispatch("actSignup", payload);
+      }
     },
   },
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+.show-id-error,
+.show-password-error1,
+.show-password-error2,
+.show-password-confirm-error1,
+.show-password-confirm-error2 {
+  display: flex;
+  justify-content: flex-start;
+  color: Red;
+  display: none;
+  margin: 0px;
+}
+</style>

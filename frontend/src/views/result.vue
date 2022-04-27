@@ -1,12 +1,9 @@
 <template>
   <div>
-    <div style="margin-bottom: 5px">
+    <div style="margin-bottom: 5px; width: 100%">
       <b-row>
-        <b-col cols="2">
-          <app-sidebar />
-        </b-col>
         <b-col>
-          <div style="margin-right: 22px">
+          <div>
             <hr />
             <h2>작업 결과 목록</h2>
             <b-table
@@ -17,7 +14,7 @@
               :fields="fields"
             ></b-table>
           </div>
-          <div style="margin-right: 22px">
+          <div>
             <hr />
             <h2>비상정지 목록</h2>
             <b-table
@@ -35,12 +32,7 @@
 </template>
 
 <script>
-import Sidebar from "../components/layout/Sidebar.vue";
-
 export default {
-  components: {
-    "app-sidebar": Sidebar,
-  },
   data() {
     return {
       // TODO: id -> userId, deviceId -> deviceName으로 수정

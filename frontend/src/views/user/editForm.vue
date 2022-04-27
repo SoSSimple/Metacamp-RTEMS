@@ -1,12 +1,9 @@
 <template>
   <div>
     <b-modal id="modal-user-editForm" @ok="onSubmit">
-      <div>
+      <div id="user-edit-wrapper">
         <b-form-group label="사용자이름" label-for="name" label-cols="3">
           <b-form-input id="name" v-model="userData.name"></b-form-input>
-        </b-form-group>
-        <b-form-group label="비밀번호" label-for="password" label-cols="3">
-          <b-form-input id="password" v-model="password"></b-form-input>
         </b-form-group>
         <b-form-group label="권한" label-for="role" label-cols="3">
           <select v-model="userData.role">
@@ -42,6 +39,7 @@ export default {
   computed: {},
   methods: {
     onSubmit() {
+      let checkEdit = confirm("수정하시겠습니까?");
       const payload = {
         name: this.userData.name,
         password: this.password,
@@ -49,14 +47,26 @@ export default {
         department: this.userData.department,
         id: this.userData.id,
       };
-      this.$store.dispatch("actUpdateUserList", payload);
+      if (checkEdit) {
+        this.$store.dispatch("actUpdateUserList", payload);
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-select-box {
+.modal-body {
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-end;
+}
+#user-edit-wrapper {
+  padding: 40px;
+}
+
+#user-edit-wrapper div {
+  margin-bottom: 50px;
 }
 </style>

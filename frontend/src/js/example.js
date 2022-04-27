@@ -12,8 +12,8 @@ import { Event } from "./assets/event";
 import { Gui } from "./plugins/gui";
 
 export default async (element) => {
-  element.style.width = "700px";
-  element.style.height = "700px";
+  element.style.height = "100vh";
+  element.style.width = "100vw";
 
   // Scene Setting
   let scene = new Scene("edukit");

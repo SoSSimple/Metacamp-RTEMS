@@ -11,13 +11,15 @@
               </option>
             </b-form-select>
           </b-form-group>
-          <b-form-textarea
-            id="textarea"
-            v-model="writeEditReason"
-            placeholder="edit"
-            rows="3"
-            max-rows="6"
-          ></b-form-textarea>
+          <b-form-group v-slot="{ ariaDescribedby }">
+            <b-form-radio-group
+              id="radio-group-1"
+              v-model="selectedOperating"
+              :options="options"
+              :aria-describedby="ariaDescribedby"
+              name="radio-options"
+            ></b-form-radio-group>
+          </b-form-group>
         </div>
 
         <div v-else-if="inputMode === 'complete'">
@@ -60,13 +62,15 @@
               </option>
             </b-form-select>
           </b-form-group>
-          <b-form-textarea
-            id="textarea"
-            v-model="writeDeleteReason"
-            placeholder="delete"
-            rows="3"
-            max-rows="6"
-          ></b-form-textarea>
+          <b-form-group>
+            <b-form-textarea
+              id="textarea"
+              v-model="description"
+              placeholder="Enter something..."
+              rows="3"
+              max-rows="6"
+            ></b-form-textarea>
+          </b-form-group>
         </div>
       </div>
     </b-modal>
@@ -78,13 +82,16 @@ export default {
   data() {
     return {
       returnSelected: null,
+      options: [
+        { text: "On", value: "on" },
+        { text: "Off", value: "off" },
+      ],
+      selectedOperating: false,
       selectedDevice: false,
       total: null,
       failedCount: null,
       description: null,
       me: sessionStorage,
-      writeEditReason: null,
-      writeDeleteReason: null,
     };
   },
   computed: {
@@ -117,13 +124,23 @@ export default {
       this.me;
       // 1. 가동 수정인 경우
       if (this.inputMode === "update") {
-        this.returnSelected = true;
-        const payload = {
-          writeEditReason: this.writeEditReason,
-          deviceName: this.selectedDevice,
-          userId: this.me.userId,
-        };
-        this.$store.dispatch("actDeviceOperating", payload);
+        if (this.selectedOperating == "on") {
+          this.returnSelected = true;
+          const payload = {
+            operatingState: this.returnSelected,
+            deviceName: this.selectedDevice,
+            userId: this.me.userId,
+          };
+          this.$store.dispatch("actDeviceOperating", payload);
+        } else {
+          this.returnSelected = false;
+          const payload = {
+            operatingState: this.returnSelected,
+            deviceName: this.selectedDevice,
+            userId: this.me.userId,
+          };
+          this.$store.dispatch("actDeviceOperating", payload);
+        }
       }
 
       // 2. 가동 완료인 경우
@@ -133,7 +150,6 @@ export default {
           userId: this.me.userId,
           total: this.total,
           failedCount: this.failedCount,
-          description: this.description,
         };
         this.$store.dispatch("actDeviceComplete", payload);
       }
@@ -142,8 +158,9 @@ export default {
       if (this.inputMode === "pause") {
         const payload = {
           deviceName: this.selectedDevice,
-          writeDeleteReason: this.writeDeleteReason,
+          description: this.description,
         };
+        console.log(this.stop);
         this.$store.dispatch("actDevicePause", payload);
       }
     },

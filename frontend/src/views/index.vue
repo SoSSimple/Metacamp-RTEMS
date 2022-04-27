@@ -1,27 +1,9 @@
 <template>
-  <div v-if="valid">
-    <b-container fluid style="padding-left: 0px">
-      <b-row>
-        <b-col
-          cols="2"
-          style="padding-right: 0px; margin-left: 8px; margin-right: 8px"
-        >
-          <app-sidebar />
-        </b-col>
-        <b-col style="padding-left: 0px; padding-right: 0px">
-          <div class="content-body">
-            <router-view />
-          </div>
-        </b-col>
-      </b-row>
-    </b-container>
-  </div>
-
-  <b-container v-else>
+  <b-container>
     <h1>login</h1>
     <div>
       <b-form @submit="onSubmit">
-        <b-form-group id="input-group-1" label-for="input-1">
+        <b-form-group class="userId" id="input-group-1" label-for="input-1">
           <b-form-input
             id="input-1"
             v-model="form.id"
@@ -31,7 +13,11 @@
           </b-form-input>
         </b-form-group>
 
-        <b-form-group id="input-group-2" label-for="input-2">
+        <b-form-group
+          class="userPassword"
+          id="input-group-2"
+          label-for="input-2"
+        >
           <b-form-input
             id="input-2"
             v-model="form.password"
@@ -41,9 +27,7 @@
           >
           </b-form-input>
         </b-form-group>
-        <b-button type="submit" variant="primary" style="margin: 5px"
-          >Submit</b-button
-        >
+        <b-button type="submit" variant="primary">Submit</b-button>
         <b-button @click="onSubmitSignup">signup</b-button>
       </b-form>
     </div>
@@ -52,17 +36,14 @@
 </template>
 
 <script>
-import Sidebar from "../components/layout/Sidebar.vue";
 import SignupInform from "./user/signupInform.vue";
 
 export default {
   components: {
-    "app-sidebar": Sidebar,
     inform: SignupInform,
   },
   data() {
     return {
-      valid: false,
       form: {
         id: "",
         password: "",
@@ -81,18 +62,23 @@ export default {
   methods: {
     searchUserSession() {
       if (sessionStorage.length > 0) {
-        this.valid = true;
+        this.valid = false;
       } else {
         this.valid = false;
       }
     },
     onSubmit(event) {
       event.preventDefault();
+      this.$route.meta.header = true;
       const payload = {
         userId: this.form.id,
         password: this.form.password,
       };
+
       this.$store.dispatch("actUserLogin", payload);
+
+      this.form.id = "";
+      this.form.password = "";
     },
     onSubmitSignup() {
       this.$bvModal.show("modal-signup-inform");
@@ -100,3 +86,25 @@ export default {
   },
 };
 </script>
+
+<style>
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+  width: 50px;
+}
+
+.container form {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.btn-primary {
+  margin-bottom: 5px;
+}
+</style>

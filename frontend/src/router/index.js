@@ -8,12 +8,18 @@ const routes = [
   {
     path: "/",
     name: "Home",
+    meta: { header: false },
     component: Home,
   },
   {
     path: "/dashboard",
     name: "dashboard",
     component: () => import("../views/dashboard.vue"),
+  },
+  {
+    path: "/example",
+    name: "example",
+    component: () => import("../views/example.vue"),
   },
   {
     path: "/user",
@@ -40,6 +46,11 @@ const routes = [
     path: "/webgl",
     name: "webgl",
     component: () => import("../views/webgl/webgl.vue"),
+  },
+  {
+    path: "/mypage",
+    name: "mypage",
+    component: () => import("../views/mypage.vue"),
   },
   {
     path: "*",
