@@ -7,6 +7,12 @@
       </label>
       <input type="checkbox" id="btn" />
       <ul>
+        <li>
+          <a
+            href="http://localhost:3003/d/x2X2wywnz/new-dashboard?orgId=1&from=now-1m&to=now&refresh=5s"
+            >Dashboard</a
+          >
+        </li>
         <li><a href="http://192.168.43.208:1880/ui">NODE RED</a></li>
         <li>
           <label for="btn-1" class="show">Features +</label>
@@ -14,7 +20,6 @@
           <input type="checkbox" id="btn-1" />
           <ul class="nav-detail">
             <li @click="$router.push('/webgl')">디지털트윈</li>
-            <li @click="$router.push('/dashboard')">대시보드</li>
             <li @click="$router.push('/user')">사용자 관리</li>
             <li @click="$router.push('/device')">장비 관리</li>
             <li @click="$router.push('/workorder')">작업지시서</li>
