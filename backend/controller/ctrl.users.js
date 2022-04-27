@@ -3,12 +3,6 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
-// const userSession = (req, res, next) => {
-//   console.log("user session 등록", req.user);
-//   res.locals.user = req.user;
-//   next();
-// };
-
 const getUsers = async (req, res, next) => {
   try {
     const exUser = await User.findAll({});
@@ -86,8 +80,10 @@ const signUser = async (req, res, next) => {
 };
 
 const removeUser = async (req, res, next) => {
-  const userId = req.body.userId;
+  // console.log(req.body);
   try {
+    const { userId } = req.body;
+    console.log(userId);
     const result = await User.destroy({ where: { userId } });
     res.status(201).json({
       data: {
@@ -104,27 +100,51 @@ const removeUser = async (req, res, next) => {
 
 const editUser = async (req, res, next) => {
   // TODO: params로 받아오는 값을 body로 수정해서 id와 password가 일치하는지 비교한 후 맞으면 수정, 아니면 에러 처리
-  const { userId, name, password, role, department } = req.body;
-  const paramUserId = req.params.id;
-  console.log(paramUserId);
+  const { userId, name, password, role, department, id } = req.body;
+  // const paramUserId = req.params.id;
+  const salt = 12;
   try {
-    const hash = await bcrypt.hash(password, 12);
-    await User.update(
-      {
-        userId,
-        name,
-        password: hash,
-        department,
-        role,
-      },
-      { where: { userId: paramUserId } }
-    );
-    res.status(201).json({
-      data: {
-        succes: true,
-        msg: "회원정보 수정 성공",
-      },
-    });
+    if (password) {
+      console.log("edit", password);
+      // 수정 폼에 패스워드를 입력했을 때
+      const hash = await bcrypt.hash(password, salt);
+      const user = await User.update(
+        {
+          userId,
+          name,
+          password: hash,
+          department,
+          role,
+        },
+        { where: { id } }
+      );
+      res.status(201).json({
+        data: {
+          succes: true,
+          msg: "회원정보 수정 성공",
+          user,
+        },
+      });
+    } else {
+      // 수정 폼에 패스워드를 입력하지 않았을 때
+      console.log("password nothing");
+      const user = await User.update(
+        {
+          userId,
+          name,
+          department,
+          role,
+        },
+        { where: { id } }
+      );
+      res.status(201).json({
+        data: {
+          succes: true,
+          msg: "회원정보 수정 성공",
+          user,
+        },
+      });
+    }
   } catch (error) {
     console.error(`editUser error: ${error}`);
     return next(error);
@@ -142,8 +162,6 @@ const loginUser = async (req, res, next) => {
         .status(401)
         .json({ data: { success: false, msg: info.message } });
     }
-
-    // session 등록
     req.session.user = {
       userId: user.userId,
       name: user.name,
@@ -177,7 +195,6 @@ const loginUser = async (req, res, next) => {
             name,
             role,
             department,
-            token,
           },
         });
       });
@@ -200,7 +217,6 @@ const logoutUser = (req, res) => {
 };
 
 module.exports = {
-  // userSession,
   getUsers,
   getUserLog,
   signUser,

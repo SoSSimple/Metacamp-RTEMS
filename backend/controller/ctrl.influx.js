@@ -3,10 +3,10 @@ const os = require("os");
 
 const influx = new Influx.InfluxDB({
   host: "localhost",
-  database: "database_rtems",
+  database: "edukit",
   schema: [
     {
-      measurement: "logs",
+      measurement: "plc_table",
       fields: {
         path: Influx.FieldType.STRING,
         time: Influx.FieldType.STRING,
@@ -25,7 +25,7 @@ const postInflux = (req, res, next) => {
   influx
     .writePoints([
       {
-        measurement: "logs",
+        measurement: "plc_table",
         tags: { host: os.hostname() },
         fields: { time, temperature, huminity, path: req.path },
       },

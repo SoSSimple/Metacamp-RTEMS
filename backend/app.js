@@ -17,6 +17,7 @@ const PORT = 8080;
 const usersRoute = require("./routes/users.js");
 const devicesRoute = require("./routes/devices.js");
 const influxRoute = require("./routes/influx.js");
+const mqttRoute = require("./routes/mqtt.js");
 
 // passport
 const passport = require("passport");
@@ -106,6 +107,7 @@ app.get("/", (req, res, next) => {
   res.send("<h1>express test</h1>");
 });
 
+app.use("/mqtt://220.90.129.56:1883", mqttRoute);
 app.use("/influx", influxRoute);
 app.use("/users", usersRoute);
 app.use("/devices", devicesRoute);

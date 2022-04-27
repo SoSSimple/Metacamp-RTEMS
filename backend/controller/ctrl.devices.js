@@ -262,8 +262,8 @@ const paused = async (req, res, next) => {
       const userId = await exDevice.getDeviceLogs({
         attributes: ["UserId"],
         setQuery: {
-          where: req.body.deviceId,
-          order: [["createdAt", "DESC"]],
+          where: { DeviceId: req.body.deviceId },
+          order: [["createdAt"]],
         },
         limit: 1,
       });
@@ -272,8 +272,11 @@ const paused = async (req, res, next) => {
         { where: { id: deviceId } }
       );
       const exUserId = userId[0].dataValues.DeviceLog.dataValues.UserId;
+      console.log(exUserId);
       let user = await User.findOne({ where: { id: exUserId } });
+      console.log(user);
       user = user.dataValues.userId;
+      console.log(user);
       await Pause.create({
         userId: user,
         deviceId: deviceName,
