@@ -3,12 +3,6 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 
-// const userSession = (req, res, next) => {
-//   console.log("user session 등록", req.user);
-//   res.locals.user = req.user;
-//   next();
-// };
-
 const getUsers = async (req, res, next) => {
   try {
     const exUser = await User.findAll({});
@@ -102,19 +96,6 @@ const removeUser = async (req, res, next) => {
     console.error(`removeUser error: ${error}`);
     return next(error);
   }
-  // try {
-  //   const id = req.params.id;
-  //   const result = await User.destroy({ where: { id } });
-  //   res.status(201).json({
-  //     data: {
-  //       msg: "회원탈퇴 성공",
-  //       succes: true,
-  //       result,
-  //     },
-  //   });
-  // } catch (error) {
-  //   return next(error);
-  // }
 };
 
 const editUser = async (req, res, next) => {
@@ -181,8 +162,6 @@ const loginUser = async (req, res, next) => {
         .status(401)
         .json({ data: { success: false, msg: info.message } });
     }
-
-    // session 등록
     req.session.user = {
       userId: user.userId,
       name: user.name,
@@ -216,7 +195,6 @@ const loginUser = async (req, res, next) => {
             name,
             role,
             department,
-            // token,
           },
         });
       });
@@ -239,7 +217,6 @@ const logoutUser = (req, res) => {
 };
 
 module.exports = {
-  // userSession,
   getUsers,
   getUserLog,
   signUser,

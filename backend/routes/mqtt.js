@@ -8,7 +8,7 @@ const ctrlInflux = require("../controller/ctrl.influx.js");
 router.post("/", ctrlInflux.postInflux);
 
 // mqtt
-// router.post("/", ctrlInflux.postInflux);
+router.post("/", ctrlInflux.postInflux);
 
 // localhost:8080/influx/log
 // influxdb 값 가져오기
