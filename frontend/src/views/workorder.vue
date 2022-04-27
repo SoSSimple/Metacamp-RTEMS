@@ -98,13 +98,12 @@ export default {
     createConnection() {
       const connectUrl = process.env.VUE_APP_MQTT;
 
-      console.log(connectUrl);
       try {
         this.client = mqtt.connect(connectUrl);
       } catch (error) {
         console.log("mqtt.connect error", error);
       }
-      // console.log(this.client.on);
+
       this.client.on("connect", () => {
         const topic = "UVC-EDU-01";
         this.client.subscribe(topic, {}, (error) => {
@@ -114,6 +113,7 @@ export default {
         });
         console.log("Connection succeeded!");
       });
+
       this.client.on("message", (topic, message) => {
         this.mqttData = JSON.parse(message);
         console.log(this.mqttData);

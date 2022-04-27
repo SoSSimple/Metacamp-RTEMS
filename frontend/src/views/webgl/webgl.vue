@@ -75,6 +75,12 @@ export default {
   padding: 0;
   border-left: 0px solid #1b1b1b;
 }
+.dg + div {
+  display: block;
+  position: absolute;
+  top: 830px;
+  left: 100px;
+}
 
 .cr {
   height: 50px !important;

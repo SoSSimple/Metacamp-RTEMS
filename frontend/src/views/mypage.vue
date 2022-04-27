@@ -62,6 +62,7 @@ export default {
   padding: 30px;
   background: white;
   flex-wrap: nowrap;
+  font-weight: 500;
 }
 .mypage-wrapper h3,
 .mypage-wrapper div {
