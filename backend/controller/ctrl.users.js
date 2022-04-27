@@ -21,15 +21,22 @@ const getUsers = async (req, res, next) => {
 
 const getUserLog = async (req, res, next) => {
   try {
-    const user = await User.findOne({ where: req.body.id });
+    const user = await User.findOne({ where: req.body.userId });
     if (user) {
-      // await user.addDeviceUserLogs(parseInt(req.body.deviceId, 10));
       const resultUserLogs = await user.getDeviceUserLogs({
-        where: req.body.id,
+        where: req.body.userId,
       });
-      res.status(201).json({ resultUserLogs });
+      res.status(201).json({
+        data: {
+          success: true,
+          msg: "유저의 장비 로그 가져오기",
+          resultUserLogs,
+        },
+      });
     } else {
-      res.status(404).send("no user");
+      res
+        .status(404)
+        .json({ data: { success: false, msg: "존재하지 않는 회원" } });
     }
   } catch (error) {
     console.error(error);
@@ -39,26 +46,27 @@ const getUserLog = async (req, res, next) => {
 
 const signUser = async (req, res, next) => {
   try {
-    const { name, userId, password, email } = req.body;
+    const { name, userId, password, department, role } = req.body;
     const exUser = await User.findOne({ where: { userId } });
     if (!exUser) {
       // 중복된 아이디가 없다면
-      res.status(201).json({
-        data: {
-          success: true,
-          msg: "가입 성공",
-        },
-      });
       const hash = await bcrypt.hash(password, 12);
       await User.create({
         name,
         userId,
         password: hash,
-        email,
+        department,
+        role,
+      });
+      return res.status(201).json({
+        data: {
+          success: true,
+          msg: "가입 성공",
+        },
       });
     } else {
       // 중복되는 아이디가 있으면
-      res.status(401).json({
+      return res.status(401).json({
         data: {
           success: false,
           msg: "이미 가입된 회원",
@@ -72,8 +80,10 @@ const signUser = async (req, res, next) => {
 };
 
 const removeUser = async (req, res, next) => {
-  const userId = req.body.userId;
+  // console.log(req.body);
   try {
+    const { userId } = req.body;
+    console.log(userId);
     const result = await User.destroy({ where: { userId } });
     res.status(201).json({
       data: {
@@ -89,26 +99,52 @@ const removeUser = async (req, res, next) => {
 };
 
 const editUser = async (req, res, next) => {
-  const { userId, name, password, role } = req.body;
-  const id = req.params;
-  console.log(id);
+  // TODO: params로 받아오는 값을 body로 수정해서 id와 password가 일치하는지 비교한 후 맞으면 수정, 아니면 에러 처리
+  const { userId, name, password, role, department, id } = req.body;
+  // const paramUserId = req.params.id;
+  const salt = 12;
   try {
-    const hash = await bcrypt.hash(password, 12);
-    await User.update(
-      {
-        userId,
-        name,
-        password: hash,
-        role,
-      },
-      { where: id }
-    );
-    res.status(201).json({
-      data: {
-        succes: true,
-        msg: "회원정보 수정 성공",
-      },
-    });
+    if (password) {
+      console.log("edit", password);
+      // 수정 폼에 패스워드를 입력했을 때
+      const hash = await bcrypt.hash(password, salt);
+      const user = await User.update(
+        {
+          userId,
+          name,
+          password: hash,
+          department,
+          role,
+        },
+        { where: { id } }
+      );
+      res.status(201).json({
+        data: {
+          succes: true,
+          msg: "회원정보 수정 성공",
+          user,
+        },
+      });
+    } else {
+      // 수정 폼에 패스워드를 입력하지 않았을 때
+      console.log("password nothing");
+      const user = await User.update(
+        {
+          userId,
+          name,
+          department,
+          role,
+        },
+        { where: { id } }
+      );
+      res.status(201).json({
+        data: {
+          succes: true,
+          msg: "회원정보 수정 성공",
+          user,
+        },
+      });
+    }
   } catch (error) {
     console.error(`editUser error: ${error}`);
     return next(error);
@@ -122,28 +158,50 @@ const loginUser = async (req, res, next) => {
       return next(authError);
     }
     if (!user) {
-      console.log(user);
-      return res.send("<h1>id 혹은 password가 일치하지 않음</h1>");
+      return res
+        .status(401)
+        .json({ data: { success: false, msg: info.message } });
     }
-    return req.login(user, (loginError) => {
-      if (loginError) {
-        console.error(`loginError ${loginError}`);
-        return next(loginError);
-      }
-      let token = "";
-      token = jwt.sign(
-        {
-          userId: user.userId,
-          password: user.password,
-        },
-        "secretkey",
-        {
-          expiresIn: "10m",
+    req.session.user = {
+      userId: user.userId,
+      name: user.name,
+      department: user.department,
+      role: user.role,
+    };
+
+    if (req.session.user) {
+      return req.login(user, (loginError) => {
+        const { userId, name, role, department } = user;
+        if (loginError) {
+          return next(loginError);
         }
-      );
-      res.setHeader("token", token);
-      return res.status(201).json({ data: { msg: "로그인 성공", token } });
-    });
+        let token = "";
+        token = jwt.sign(
+          {
+            userId: user.userId,
+            password: user.password,
+          },
+          "secretkey",
+          {
+            expiresIn: "10m",
+          }
+        );
+        res.setHeader("token", token);
+        return res.status(201).json({
+          data: {
+            success: true,
+            msg: "로그인 성공",
+            userId,
+            name,
+            role,
+            department,
+          },
+        });
+      });
+    } else {
+      console.log("session 등록 실패");
+      res.send("session 등록 실패");
+    }
   })(req, res, next);
 };
 

@@ -7,16 +7,25 @@ const ctrlDevices = require("../controller/ctrl.devices.js");
 router.get("/", ctrlDevices.getDevices);
 
 // GET /devices/:id/deviced id로 특정 장비만 가져오기
-router.get("/:id/deviced", ctrlDevices.getDevice);
+router.get("/:id/device", ctrlDevices.getDevice);
 
 // GET /devices/log 사용된 장비의 이력 가져오기
-router.get("/log", ctrlDevices.getDeviceLog);
+router.get("/log/:id", ctrlDevices.getDeviceLog);
+
+// GET /devices/results
+router.get("/results", ctrlDevices.results);
+
+// GET /devices/pause/list
+router.get("/pause/list", ctrlDevices.pauseList);
 
 // POST /devices/create 장비 만들기
 router.post("/create", ctrlDevices.createDevice);
 
 // POST /devices/completed
 router.post("/completed", ctrlDevices.completed);
+
+// POST /devices/pause
+router.post("/pause", ctrlDevices.paused);
 
 // PATCH /devices/ready 특정 장비의 준비상태 바꾸기
 router.patch("/ready", ctrlDevices.readyDevice);
