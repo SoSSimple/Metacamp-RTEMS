@@ -99,7 +99,7 @@ export default {
       passwordValidation: "",
       showPasswordNotEquelValidation: "",
       showIdError: "6~20 영문 혹은 영문+숫자만 가능합니다",
-      showPasswordError: "8글자이상 영문+숫자만 가능합니다",
+      showPasswordError: "8~15 영문+숫자만 가능합니다",
       showPasswordNotEquelError: "비밀번호와 비밀번호 확인은 같아야 합니다",
       validationChecked: "false",
       optionsRole: [
@@ -116,7 +116,7 @@ export default {
   methods: {
     validationCheck() {
       const idValidation = /^[a-z]+[a-z0-9]{5,19}$/g; // 영문자로 시작하는 영문자 또는 숫자 6~20자
-      const passwordValidation = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,15}$/; //8 ~ 16자 영문, 숫자 조합
+      const passwordValidation = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,14}$/; //8 ~ 15자 영문, 숫자 조합
 
       const showIdError = document.querySelector(".show-id-error");
       const showPasswordError1 = document.querySelector(
@@ -188,8 +188,8 @@ export default {
         return showAlert("공란을 채워주세요");
       }
 
-      if (this.password.length > 16) {
-        return showAlert("비밀번호를 16글자 이하로 입력해주세요");
+      if (this.password.length > 15) {
+        return showAlert("비밀번호를 15글자 이하로 입력해주세요");
       }
 
       if (this.name.length < 1) {
