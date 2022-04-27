@@ -74,6 +74,17 @@
 </template>
 
 <script>
+const showAlert = (error) => {
+  alert(error);
+};
+
+const showUserValidationError = (showCssChange) => {
+  showCssChange.style.display = "flex";
+};
+
+const hideUserValidationError = (showCssChange) => {
+  showCssChange.style.display = "none";
+};
 export default {
   data() {
     return {
@@ -105,7 +116,8 @@ export default {
   methods: {
     validationCheck() {
       const idValidation = /^[a-z]+[a-z0-9]{5,19}$/g; // 영문자로 시작하는 영문자 또는 숫자 6~20자
-      const passwordValidation = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,25}$/; //8 ~ 16자 영문, 숫자 조합
+      const passwordValidation = /^(?=.*[a-zA-Z])(?=.*[0-9]).{8,15}$/; //8 ~ 16자 영문, 숫자 조합
+
       const showIdError = document.querySelector(".show-id-error");
       const showPasswordError1 = document.querySelector(
         ".show-password-error1"
@@ -121,35 +133,35 @@ export default {
       );
 
       if (!idValidation.test(this.userId)) {
-        showIdError.style.display = "flex";
+        showUserValidationError(showIdError);
       } else {
-        showIdError.style.display = "none";
+        hideUserValidationError(showIdError);
       }
 
       if (!passwordValidation.test(this.password)) {
-        showPasswordError1.style.display = "flex";
+        showUserValidationError(showPasswordError1);
       } else {
-        showPasswordError1.style.display = "none";
+        hideUserValidationError(showPasswordError1);
       }
 
       if (!passwordValidation.test(this.password)) {
-        showPasswordError2.style.display = "flex";
+        showUserValidationError(showPasswordError2);
       } else {
-        showPasswordError2.style.display = "none";
+        hideUserValidationError(showPasswordError2);
       }
 
       if (!passwordValidation.test(this.checkPassword)) {
-        showPasswordConfirmError1.style.display = "flex";
+        showUserValidationError(showPasswordConfirmError1);
       } else {
-        showPasswordConfirmError1.style.display = "none";
+        hideUserValidationError(showPasswordConfirmError1);
       }
 
       if (this.password !== this.checkPassword) {
-        showPasswordConfirmError1.style.display = "flex";
-        showPasswordConfirmError2.style.display = "flex";
+        showUserValidationError(showPasswordConfirmError1);
+        showUserValidationError(showPasswordConfirmError2);
       } else {
-        showPasswordConfirmError1.style.display = "none";
-        showPasswordConfirmError2.style.display = "none";
+        hideUserValidationError(showPasswordConfirmError1);
+        hideUserValidationError(showPasswordConfirmError2);
       }
       this.allPassed = true;
     },
@@ -164,20 +176,32 @@ export default {
       };
 
       if (this.userId.length < 1) {
-        return alert("공란을 채워주세요");
+        return showAlert("공란을 채워주세요");
       }
+
+      console.log(this.userId.length);
+      if (this.userId.length > 20) {
+        return showAlert("아이디를 20글자 이하로 입력해주세요");
+      }
+
       if (this.password.length < 1) {
-        return alert("공란을 채워주세요");
+        return showAlert("공란을 채워주세요");
       }
+
+      if (this.password.length > 16) {
+        return showAlert("비밀번호를 16글자 이하로 입력해주세요");
+      }
+
       if (this.name.length < 1) {
-        return alert("공란을 채워주세요");
+        return showAlert("공란을 채워주세요");
       }
 
       if (this.selectedRole.length < 1) {
-        return alert("WORKER 또는 ADMIN을 선택해주세요");
+        return showAlert("WORKER 또는 ADMIN을 선택해주세요");
       }
+
       if (this.selectedDepartment.length < 1) {
-        return alert("sales 또는 dev를 선택해주세요");
+        return showAlert("sales 또는 dev를 선택해주세요");
       }
 
       if (this.allPassed) {
@@ -198,5 +222,6 @@ export default {
   justify-content: flex-start;
   color: Red;
   display: none;
+  margin: 0px;
 }
 </style>
